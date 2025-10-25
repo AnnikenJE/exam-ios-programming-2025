@@ -3,7 +3,6 @@
 //  Beacon
 //
 
-
 import SwiftUI
 
 struct MyPlacesView: View {
