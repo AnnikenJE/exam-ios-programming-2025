@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct MainTabView: View {
+    
+    // Body
     var body: some View {
         TabView{
             ExploreView()
@@ -17,6 +19,7 @@ struct MainTabView: View {
                     Label("Mine steder", systemImage: "pin")
                 }
         }
+        .tint(Colors.beaconOrange)
     }
 }
 

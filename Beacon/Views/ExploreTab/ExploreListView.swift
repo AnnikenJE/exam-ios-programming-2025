@@ -9,10 +9,13 @@ struct ExploreListView: View {
     
     @Binding var places: [Places]
     
+    // Body
     var body: some View {
+        
         List(places, id: \.self) { place in
             ForEach(place.features, id: \.self) { feature in
                 Text(feature.properties.name)
+                Text(feature.properties.addressLine)
             }
         }
     }
