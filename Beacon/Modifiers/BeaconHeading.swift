@@ -1,6 +1,0 @@
-//
-//  BeaconHeading.swift
-//  Beacon
-//
-
-

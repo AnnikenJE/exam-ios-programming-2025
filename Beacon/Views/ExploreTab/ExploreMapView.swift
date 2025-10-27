@@ -10,7 +10,7 @@ struct ExploreMapView: View {
     
     @Binding var places: [Places]
     @Binding var location: MapCameraPosition
-
+    
     //Body
     var body: some View{
         
@@ -24,12 +24,28 @@ struct ExploreMapView: View {
                         } label: {
                             BeaconPinView()
                         }
-
                     }
                 }
             }
+            
         }
         .ignoresSafeArea()
+        HStack() {
+            Spacer()
+            VStack{
+                Spacer()
+                // GPS Button
+                Button {
+                    // TODO: hente faktisk brukeren sin informasjon
+                    location = .region(MKCoordinateRegion.init(center: .init(latitude: 59.9111, longitude: 10.7503), span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
+                } label: {
+                    Image(systemName: "location.fill")
+                        .font(.system(size: 20, weight: .bold))
+                }
+                .buttonStyleModifier()
+                .padding()
+            }
+        }
     }
 }
 

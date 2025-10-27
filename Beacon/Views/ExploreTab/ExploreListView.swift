@@ -11,13 +11,32 @@ struct ExploreListView: View {
     
     // Body
     var body: some View {
-        
-        List(places, id: \.self) { place in
-            ForEach(place.features, id: \.self) { feature in
-                Text(feature.properties.name)
-                Text(feature.properties.addressLine)
+        NavigationStack {
+            List(places, id: \.self) { place in
+                ForEach(place.features, id: \.self) { feature in
+                    VStack{
+                        HStack{
+                            Text("Navn")
+                                .foregroundStyle(Color.gray)
+                            Spacer()
+                            Text(feature.properties.name)
+                                .font(.headline)
+                                .multilineTextAlignment(.trailing)
+                        }
+                        HStack{
+                            Text("Adresse")
+                                .foregroundStyle(Color.gray)
+                            Spacer()
+                            Text(feature.properties.addressLine)
+                                .font(.subheadline)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
+                }
             }
         }
+        .padding(.top, 80)
+        .navigationTitle("Places")
     }
 }
 

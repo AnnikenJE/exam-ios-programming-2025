@@ -20,6 +20,7 @@ struct MainTabView: View {
                 }
         }
         .tint(Colors.beaconOrange)
+        
     }
 }
 
