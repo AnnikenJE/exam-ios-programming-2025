@@ -7,7 +7,7 @@ import SwiftUI
 
 struct MainTabView: View {
     
-    // Body
+    // --------------------------------------- Body
     var body: some View {
         TabView{
             ExploreView()

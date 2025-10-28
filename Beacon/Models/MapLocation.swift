@@ -3,16 +3,19 @@
 //  Beacon
 //
 
-// Model for users map placement
+// Model for users recent map placement 
 
 import SwiftData
+import MapKit
 
 @Model
 class MapLocation {
-    var longitude: Double
-    var latitude: Double
+    var position: String
+    var longitude: CLLocationDegrees
+    var latitude: CLLocationDegrees
     
-    init(longitude: Double, latitude: Double){
+    init(position: String,longitude: CLLocationDegrees, latitude: CLLocationDegrees){
+        self.position = position
         self.longitude = longitude
         self.latitude = latitude
     }

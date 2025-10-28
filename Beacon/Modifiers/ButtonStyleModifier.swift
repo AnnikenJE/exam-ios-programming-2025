@@ -3,6 +3,8 @@
 //  Beacon
 //
 
+// Default button styling
+
 import SwiftUI
 
 struct ButtonStyleModifier: ViewModifier {
