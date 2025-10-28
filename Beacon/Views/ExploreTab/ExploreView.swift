@@ -88,6 +88,8 @@ struct ExploreView: View {
                             Text("Kafé").tag(Category.cafe)
                         }
                         .pickerStyle(.segmented)
+                        .background(Color.deepBlue)
+                        .cornerRadius(18)
                         
                         // Get places nearby button
                         Button {
@@ -107,7 +109,7 @@ struct ExploreView: View {
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
                             .toggleStyle(.button)
                             .contentTransition(.symbolEffect)
-                            .background(Colors.deepBlue)
+                            .background(Color.deepBlue)
                             .cornerRadius(18)
                     }
                     Spacer()

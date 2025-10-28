@@ -19,7 +19,7 @@ struct MainTabView: View {
                     Label("Mine steder", systemImage: "pin")
                 }
         }
-        .tint(Colors.beaconOrange)
+        .tint(Color.beaconOrange)
         
     }
 }

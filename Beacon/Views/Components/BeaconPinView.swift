@@ -5,6 +5,8 @@
 
 import SwiftUI
 
+// Slettes?
+
 struct BeaconPinView: View {
     public var body: some View {
             ZStack{
@@ -12,9 +14,9 @@ struct BeaconPinView: View {
                     .resizable()
                     .frame(width: 47, height: 33)
                     .offset(y: 23)
-                    .foregroundColor(Color(Colors.beaconOrange))
+                    .foregroundColor(Color(Color.beaconOrange))
                 Circle()
-                    .fill(Colors.beaconOrange)
+                    .fill(Color.beaconOrange)
                     .frame(width: 50)
                 Circle()
                     .fill(.white)
@@ -22,7 +24,7 @@ struct BeaconPinView: View {
                 Image(systemName: "star.fill")
                     .resizable()
                     .frame(width: 23, height: 23)
-                    .foregroundColor(Color(Colors.beaconOrange))
+                    .foregroundColor(Color.beaconOrange)
             }
     }
 }
