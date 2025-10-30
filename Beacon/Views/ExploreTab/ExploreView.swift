@@ -32,6 +32,7 @@ struct ExploreView: View {
     @State private var isMapShowing = true
     @State private var places: [Places] = []
     @State private var errorMessage: String? = nil
+    @State private var isLoading = false
     
     // Default location on startup, Oslo Central Station 59.9111 10.7503
     @State private var location: MapCameraPosition = .region(
@@ -43,6 +44,9 @@ struct ExploreView: View {
     func getDataFromAPI() async {
         // TODO: Fiks rotet u denne
         do {
+            isLoading = true
+            errorMessage = nil
+            
             getCategory()
             
             let APIkey = APIKey.geoapifyAPIKey
@@ -57,7 +61,9 @@ struct ExploreView: View {
             
             //TODO: REMOVE
             print(latitude, longitude)
+            isLoading = false
         } catch {
+            isLoading = false
             errorMessage = "Something went wrong in getDataFromAPI(). \(error.localizedDescription)"
             print(errorMessage)
         }
@@ -76,12 +82,16 @@ struct ExploreView: View {
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
+            
             ZStack {
-                // Swap between map and list
-                if(isMapShowing) {
-                    ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude)
+                if(isLoading){
+                    ProgressView("Henter steder...")
                 } else {
-                    ExploreListView(places: $places)
+                    if(isMapShowing) {
+                        ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude)
+                    } else {
+                        ExploreListView(places: $places)
+                    }
                 }
                 
                 VStack {
