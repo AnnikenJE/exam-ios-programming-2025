@@ -12,11 +12,10 @@ struct ExploreListView: View {
     
     // --------------------------------------- Body
     var body: some View {
-        
         NavigationStack {
             
             if (places.isEmpty) {
-                
+                //TODO: Gjøre at den viser feks resturant og ikke steder
                     Text("Vennligst oppdater for å vise steder.")
                     .foregroundStyle(Color.gray)
                 
@@ -44,10 +43,9 @@ struct ExploreListView: View {
                         }
                     } // End List
                 }
+                .padding(.top, 60)
             }
         } // End NavigationStack
-        .padding(.top, 80)
-        .navigationTitle("Places")
     }
 }
 
