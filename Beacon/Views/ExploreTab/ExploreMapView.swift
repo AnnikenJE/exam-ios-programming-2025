@@ -15,10 +15,15 @@ struct ExploreMapView: View {
     @Binding var latitude: Double
     @Binding var longitude: Double
     
+    //States
+    @State var selectedPlace: Feature? = nil
+    @State var isSheetPresented = false
+
+    
     // --------------------------------------- Body
     var body: some View{
         NavigationStack{
-            ZStack{
+            ZStack {
                 Map(position: $location){
                     ForEach(places, id: \.self) { place in
                         ForEach(place.features, id: \.self) { place in
@@ -26,7 +31,8 @@ struct ExploreMapView: View {
                             //TODO: Fiks kordinatene
                             Annotation(place.properties.name, coordinate: CLLocationCoordinate2D(latitude: place.properties.lat, longitude: place.properties.lon)){
                                 Button {
-                                    // TODO:
+                                    selectedPlace = place
+                                    isSheetPresented = true
                                 } label: {
                                     Image("pin1")
                                         .resizable()
@@ -36,6 +42,10 @@ struct ExploreMapView: View {
                         }
                     }
                 } // End Map
+                .sheet(isPresented: $isSheetPresented){
+                    PlaceDetailsView(place: $selectedPlace)
+                  
+                }
                 .ignoresSafeArea()
                 .onAppear{
                     // Updating camera location
@@ -58,8 +68,8 @@ struct ExploreMapView: View {
                         .padding()
                     }
                 }
-            } // End NavigationStack
-        }
+            }
+        }// End NavigationStack
     }
 }
 

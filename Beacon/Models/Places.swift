@@ -11,6 +11,16 @@ struct Places: Decodable, Hashable {
 
 struct Feature: Decodable, Hashable {
     let properties: Properties
+    let openingHours: String?
+    let website: String?
+    let contact: Contact?
+    
+    enum CodingKeys: String, CodingKey {
+        case properties
+        case openingHours = "opening_hours"
+        case website
+        case contact
+    }
 }
 
 struct Properties: Decodable, Hashable {
@@ -25,4 +35,8 @@ struct Properties: Decodable, Hashable {
         case lat
         case lon
     }
+}
+struct Contact: Decodable, Hashable {
+    let phone: String?
+    let email: String?
 }

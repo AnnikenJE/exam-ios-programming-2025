@@ -12,7 +12,7 @@ struct ExploreView: View {
     // AppStorage
     @AppStorage("latitude") private var latitude = 59.9111
     @AppStorage("longitude") private var longitude = 10.7503
-    
+
     // Enum
     enum Category {
         case restaurant
@@ -46,7 +46,6 @@ struct ExploreView: View {
         do {
             isLoading = true
             errorMessage = nil
-            
             getCategory()
             
             let APIkey = APIKey.geoapifyAPIKey
@@ -82,7 +81,6 @@ struct ExploreView: View {
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
-            
             ZStack {
                 if(isLoading){
                     ProgressView("Henter steder...")
