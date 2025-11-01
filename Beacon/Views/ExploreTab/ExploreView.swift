@@ -2,6 +2,7 @@
 //  ContentView.swift
 //  Beacon
 //
+// Kandidatnr 97
 
 import SwiftUI
 import MapKit
@@ -49,7 +50,7 @@ struct ExploreView: View {
             getCategory()
             
             let APIkey = APIKey.geoapifyAPIKey
-            // TODO: Fjerne utropstegn i url ?
+            // TODO: Fjerne utropstegn i url, det kan kræsje
             let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),1000&limit=10&apiKey=\(APIkey)")!
             // TODO: Slett print
             print(url)
@@ -64,7 +65,7 @@ struct ExploreView: View {
         } catch {
             isLoading = false
             errorMessage = "Something went wrong in getDataFromAPI(). \(error.localizedDescription)"
-            print(errorMessage)
+            print(errorMessage ?? "Noe gikk galt i getDataFromAPI().")
         }
     }
     
@@ -86,9 +87,9 @@ struct ExploreView: View {
                     ProgressView("Henter steder...")
                 } else {
                     if(isMapShowing) {
-                        ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude)
+                        ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude, category: $category)
                     } else {
-                        ExploreListView(places: $places)
+                        ExploreListView(places: $places, category: $category)
                     }
                 }
                 

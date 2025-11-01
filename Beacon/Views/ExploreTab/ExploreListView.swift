@@ -2,6 +2,7 @@
 //  ExploreListView.swift
 //  Beacon
 //
+// Kandidatnr 97
 
 import SwiftUI
 
@@ -9,10 +10,11 @@ struct ExploreListView: View {
     
     // Bindings
     @Binding var places: [Places]
+    @Binding var category: String
     
     // States
-    @State var isSheetPresented = false
-    @State var selectedPlace: Feature? = nil
+    @State private var isSheetPresented = false
+    @State private var selectedPlace: Feature? = nil
     
     // --------------------------------------- Body
     var body: some View {
@@ -56,7 +58,7 @@ struct ExploreListView: View {
                     } // End ForEach
                 }   // End List
                 .sheet(isPresented: $isSheetPresented){
-                    PlaceDetailsView(place: $selectedPlace)
+                    PlaceDetailsView(place: $selectedPlace, category: $category)
                 }
                 .padding(.top, 60)
             }

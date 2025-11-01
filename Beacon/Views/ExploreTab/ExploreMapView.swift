@@ -2,6 +2,7 @@
 //  MapView.swift
 //  Beacon
 //
+// Kandidatnr 97
 
 import SwiftUI
 import MapKit
@@ -14,10 +15,11 @@ struct ExploreMapView: View {
     @Binding var location: MapCameraPosition
     @Binding var latitude: Double
     @Binding var longitude: Double
+    @Binding var category: String
     
     //States
-    @State var selectedPlace: Feature? = nil
-    @State var isSheetPresented = false
+    @State private var selectedPlace: Feature? = nil
+    @State private var isSheetPresented = false
 
     
     // --------------------------------------- Body
@@ -43,7 +45,7 @@ struct ExploreMapView: View {
                     }
                 } // End Map
                 .sheet(isPresented: $isSheetPresented){
-                    PlaceDetailsView(place: $selectedPlace)
+                    PlaceDetailsView(place: $selectedPlace, category: $category)
                   
                 }
                 .ignoresSafeArea()

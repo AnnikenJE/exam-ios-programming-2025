@@ -2,6 +2,7 @@
 //  PlaceDetailsView.swift
 //  Beacon
 //
+// Kandidatnr 97
 
 import SwiftUI
 
@@ -9,13 +10,101 @@ struct PlaceDetailsView: View {
     
     //Enviroments
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     
     //Bindings
     @Binding var place: Feature?
+    @Binding var category: String
     
-    var body: some View {
-        VStack{
-            Text(place?.properties.name ?? "Kunne ikke vise navn")
+    func openAppleMaps(){
+        if let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")") {
+            openURL(url)
         }
     }
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Information"){
+                    HStack{
+                        Text("Kategori")
+                            .foregroundStyle(Color(.gray))
+                        Spacer()
+                        Text(category)
+                    }
+                    
+                    HStack{
+                        Text("Adresse")
+                            .foregroundStyle(Color(.gray))
+                        Spacer()
+                        Text(place?.properties.addressLine ?? "Kunne ikke vise adresse")
+                    }
+                    
+                    HStack{
+                        Text("Telefonnummer")
+                            .foregroundStyle(Color(.gray))
+                        Spacer()
+                        Text(place?.properties.contact?.phone ?? "Kunne ikke vise telefonnummer.")
+                    }
+                    
+                    HStack{
+                        Text("Åpningstider")
+                            .foregroundStyle(Color(.gray))
+                        Spacer()
+                        Text(place?.properties.openingHours ?? "Kunne ikke vise åpningstider")
+                    }
+                    
+                    HStack{
+                        Text("Nettside")
+                            .foregroundStyle(Color(.gray))
+                        Spacer()
+                        
+                        //TODO: Fjerne utropstegnet, det kan kræsje
+                        Link(place?.properties.website ?? "Ingen nettside.", destination: URL(string: place?.properties.website ?? "")!)
+                    }
+                    
+                    HStack{
+                        Text("Kordinater")
+                            .foregroundStyle(Color(.gray))
+                        Spacer()
+                        Text("latitude \(place?.properties.lat ?? 0.0), \nlongitude \(place?.properties.lon ?? 0.0)")
+                    }
+                }
+                Button{
+                    openAppleMaps()
+                } label: {
+                    Text("Åpne i Maps")
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
+                }
+                .buttonStyleModifier()
+                
+            }
+            .navigationTitle(place?.properties.name ?? "Kunne ikke vise navn")
+            .toolbar{
+                ToolbarItem(placement: .confirmationAction) {
+                    Button{
+                        dismiss()
+                    }label: {
+                        Image(systemName:"xmark")
+                            .foregroundStyle(Color.white)
+                    }
+                    .buttonStyleModifier()
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    PlaceDetailsView(
+        place: .constant(
+            Feature(
+                properties:
+                    Properties(name: "Resturant Navn", addressLine: "Adresse Adresse 23", lat: 23.12412, lon: 41.24232, openingHours: "10:00-18:00", website: "www.test.com", contact: Contact(phone: "+2324332", email: "test@test.no")
+                              )
+            )
+        ),
+        category: .constant("category")
+    )
 }

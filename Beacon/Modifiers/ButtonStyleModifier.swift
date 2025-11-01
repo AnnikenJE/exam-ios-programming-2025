@@ -2,6 +2,7 @@
 //  ButtonStyleModifier.swift
 //  Beacon
 //
+// Kandidatnr 97
 
 // Default button styling
 
