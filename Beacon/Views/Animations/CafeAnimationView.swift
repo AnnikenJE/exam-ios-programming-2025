@@ -10,7 +10,7 @@ struct CafeAnimationView: View {
     
     var body: some View {
         VStack{
-            VStack{
+            ZStack{
                 Text("💨")
                     .rotationEffect(.degrees(270))
                     .font(Font.system(size: 20))
