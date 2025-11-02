@@ -4,8 +4,6 @@
 //
 // Kandidatnr 97
 
-// Struct for getting information from geoapify places API
-
 struct Places: Decodable, Hashable {
     let features: [Feature]    
 }

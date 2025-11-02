@@ -15,7 +15,7 @@ struct ExploreMapView: View {
     @Binding var location: MapCameraPosition
     @Binding var latitude: Double
     @Binding var longitude: Double
-    @Binding var category: String
+    @Binding var translatedCategory: String
     
     //States
     @State private var selectedPlace: Feature? = nil
@@ -45,7 +45,7 @@ struct ExploreMapView: View {
                     }
                 } // End Map
                 .sheet(isPresented: $isSheetPresented){
-                    PlaceDetailsView(place: $selectedPlace, category: $category)
+                    PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
                   
                 }
                 .ignoresSafeArea()

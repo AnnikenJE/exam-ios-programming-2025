@@ -8,14 +8,16 @@ import SwiftUI
 
 struct PlaceDetailsView: View {
     
-    //Enviroments
+    // Enviroments
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     
-    //Bindings
+    // Bindings
     @Binding var place: Feature?
-    @Binding var category: String
+    @Binding var translatedCategory: String
     
+    
+    // TODO: Kilde
     func openAppleMaps(){
         if let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")") {
             openURL(url)
@@ -25,12 +27,12 @@ struct PlaceDetailsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Information"){
+                Section("Informasjonn"){
                     HStack{
                         Text("Kategori")
                             .foregroundStyle(Color(.gray))
                         Spacer()
-                        Text(category)
+                        Text(translatedCategory)
                     }
                     
                     HStack{
@@ -82,6 +84,18 @@ struct PlaceDetailsView: View {
             }
             .navigationTitle(place?.properties.name ?? "Kunne ikke vise navn")
             .toolbar{
+                ToolbarItem(placement: .principal){
+                    switch(translatedCategory){
+                        case "Restaurant":
+                            ResturantAnimationView()
+                        case "Kafé":
+                            CafeAnimationView()
+                        case "Hotell":
+                            HotelAnimationView()
+                        default:
+                            EmptyView()
+                    }
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button{
                         dismiss()
@@ -102,9 +116,9 @@ struct PlaceDetailsView: View {
             Feature(
                 properties:
                     Properties(name: "Resturant Navn", addressLine: "Adresse Adresse 23", lat: 23.12412, lon: 41.24232, openingHours: "10:00-18:00", website: "www.test.com", contact: Contact(phone: "+2324332", email: "test@test.no")
-                              )
+                )
             )
         ),
-        category: .constant("category")
+        translatedCategory: .constant("category")
     )
 }

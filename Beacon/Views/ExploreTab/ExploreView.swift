@@ -34,6 +34,7 @@ struct ExploreView: View {
     @State private var places: [Places] = []
     @State private var errorMessage: String? = nil
     @State private var isLoading = false
+    @State private var translatedCategory = "Restaurant"
     
     // Default location on startup, Oslo Central Station 59.9111 10.7503
     @State private var location: MapCameraPosition = .region(
@@ -72,10 +73,13 @@ struct ExploreView: View {
     func getCategory() {
         if (selectedCategory == .cafe){
             category = "catering.cafe"
+            translatedCategory = "Kafé"
         } else if (selectedCategory == .hotel){
             category = "accommodation.hotel"
+            translatedCategory = "Hotell"
         } else {
             category = "catering.restaurant"
+            translatedCategory = "Restaurant"
         }
     }
     
@@ -83,13 +87,15 @@ struct ExploreView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                
+                //TODO: Gjøre til funksjon?
                 if(isLoading){
                     ProgressView("Henter steder...")
                 } else {
                     if(isMapShowing) {
-                        ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude, category: $category)
+                        ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
-                        ExploreListView(places: $places, category: $category)
+                        ExploreListView(places: $places, translatedCategory: $translatedCategory)
                     }
                 }
                 

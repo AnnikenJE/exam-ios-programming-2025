@@ -10,7 +10,7 @@ struct ExploreListView: View {
     
     // Bindings
     @Binding var places: [Places]
-    @Binding var category: String
+    @Binding var translatedCategory: String
     
     // States
     @State private var isSheetPresented = false
@@ -58,7 +58,7 @@ struct ExploreListView: View {
                     } // End ForEach
                 }   // End List
                 .sheet(isPresented: $isSheetPresented){
-                    PlaceDetailsView(place: $selectedPlace, category: $category)
+                    PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
                 }
                 .padding(.top, 60)
             }
