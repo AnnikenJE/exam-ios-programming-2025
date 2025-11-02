@@ -11,9 +11,10 @@ struct ResturantAnimationView: View {
     // States
     @State private var degrees = 0.0
     
+    // --------------------------------------- Body
     var body: some View {
         Text("🍽️")
-            .font(.system(size: 50))
+            .font(.system(size: 30))
             .rotationEffect(.degrees(degrees))
             .onAppear{
                 withAnimation(.easeInOut(duration: 1)){

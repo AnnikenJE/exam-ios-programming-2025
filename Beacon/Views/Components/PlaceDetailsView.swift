@@ -16,7 +16,6 @@ struct PlaceDetailsView: View {
     @Binding var place: Feature?
     @Binding var translatedCategory: String
     
-    
     // TODO: Kilde
     func openAppleMaps(){
         if let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")") {
@@ -24,6 +23,7 @@ struct PlaceDetailsView: View {
         }
     }
     
+    // --------------------------------------- Body
     var body: some View {
         NavigationStack {
             Form {
@@ -80,10 +80,14 @@ struct PlaceDetailsView: View {
                         .multilineTextAlignment(.center)
                 }
                 .buttonStyleModifier()
-                
             }
-            .navigationTitle(place?.properties.name ?? "Kunne ikke vise navn")
             .toolbar{
+                ToolbarItem(placement: .largeTitle) {
+                    Text(place?.properties.name ?? "Kunne ikke vise navn")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color.beaconOrange)
+                    .padding()
+                }
                 ToolbarItem(placement: .principal){
                     switch(translatedCategory){
                         case "Restaurant":
@@ -93,7 +97,7 @@ struct PlaceDetailsView: View {
                         case "Hotell":
                             HotelAnimationView()
                         default:
-                            EmptyView()
+                            CafeAnimationView()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {

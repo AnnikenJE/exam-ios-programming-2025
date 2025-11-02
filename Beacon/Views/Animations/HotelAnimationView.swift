@@ -11,11 +11,12 @@ struct HotelAnimationView: View {
     // States
     @State private var scale = 0.5
     
+    // --------------------------------------- Body
     var body: some View {
         Text("🏨")
-            .font(Font.system(size: 50))
+            .font(Font.system(size: 30))
             .onAppear{
-                withAnimation(.spring(bounce: 0.9)){
+                withAnimation(.spring(bounce: 0.8)){
                     scale = 1.0
                 }
             }   .scaleEffect(scale)
