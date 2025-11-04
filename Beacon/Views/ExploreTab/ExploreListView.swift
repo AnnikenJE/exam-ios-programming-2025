@@ -50,11 +50,8 @@ struct ExploreListView: View {
                                         .font(.subheadline)
                                         .multilineTextAlignment(.trailing)
                                 }
-                                
                             }
-                            
                         }
-                        
                     } // End ForEach
                 }   // End List
                 .sheet(isPresented: $isSheetPresented){
@@ -62,7 +59,6 @@ struct ExploreListView: View {
                 }
                 .padding(.top, 60)
             }
-            
         }// End NavigationStack
     }
 }

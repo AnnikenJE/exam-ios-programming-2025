@@ -16,6 +16,7 @@ struct PlaceDetailsView: View {
     @Binding var place: Feature?
     @Binding var translatedCategory: String
     
+    
     // TODO: Kilde
     func openAppleMaps(){
         if let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")") {
@@ -62,7 +63,16 @@ struct PlaceDetailsView: View {
                         Spacer()
                         
                         //TODO: Fjerne utropstegnet, det kan kræsje
-                        Link(place?.properties.website ?? "Ingen nettside.", destination: URL(string: place?.properties.website ?? "")!)
+                        if let website = place?.properties.website{
+                            
+                            if let url = URL(string: website){
+                                Link(website, destination: url)
+                            } else {
+                                Text("Ingen nettside.")
+                            }
+                        } else {
+                            Text("Ingen nettside.")
+                        }
                     }
                     
                     HStack{
@@ -86,8 +96,9 @@ struct PlaceDetailsView: View {
                     Text(place?.properties.name ?? "Kunne ikke vise navn")
                         .font(.largeTitle.bold())
                         .foregroundStyle(Color.beaconOrange)
-                    .padding()
+                        .padding()
                 }
+                
                 ToolbarItem(placement: .principal){
                     switch(translatedCategory){
                         case "Restaurant":
@@ -100,6 +111,7 @@ struct PlaceDetailsView: View {
                             CafeAnimationView()
                     }
                 }
+                
                 ToolbarItem(placement: .confirmationAction) {
                     Button{
                         dismiss()
@@ -120,7 +132,7 @@ struct PlaceDetailsView: View {
             Feature(
                 properties:
                     Properties(name: "Resturant Navn", addressLine: "Adresse Adresse 23", lat: 23.12412, lon: 41.24232, openingHours: "10:00-18:00", website: "www.test.com", contact: Contact(phone: "+2324332", email: "test@test.no")
-                )
+                              )
             )
         ),
         translatedCategory: .constant("category")

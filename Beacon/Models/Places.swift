@@ -21,7 +21,6 @@ struct Properties: Decodable, Hashable {
     let website: String?
     let contact: Contact?
     
-    
     enum CodingKeys: String, CodingKey {
         case name
         case addressLine = "address_line2"
@@ -32,6 +31,7 @@ struct Properties: Decodable, Hashable {
         case contact
     }
 }
+
 struct Contact: Decodable, Hashable {
     let phone: String?
     let email: String?

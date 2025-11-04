@@ -10,6 +10,9 @@ import SwiftData
 
 struct ExploreMapView: View {
     
+    // State object
+    @ObservedObject var LocationViewModel: LocationViewModel
+    
     // Bindings
     @Binding var places: [Places]
     @Binding var location: MapCameraPosition
@@ -21,9 +24,16 @@ struct ExploreMapView: View {
     @State private var selectedPlace: Feature? = nil
     @State private var isSheetPresented = false
 
+    func updateUserLocation() {
+        LocationViewModel.requestLocation()
+        print(LocationViewModel.authorizationStatus)
+        print(LocationViewModel.locationString)
+        latitude = LocationViewModel.location?.coordinate.latitude ?? latitude
+        longitude = LocationViewModel.location?.coordinate.longitude ??  longitude
+    }
     
     // --------------------------------------- Body
-    var body: some View{
+    var body: some View {
         NavigationStack{
             ZStack {
                 Map(position: $location){
@@ -46,6 +56,7 @@ struct ExploreMapView: View {
                 } // End Map
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
+                    
                   
                 }
                 .ignoresSafeArea()
@@ -56,11 +67,13 @@ struct ExploreMapView: View {
                 
                 HStack() {
                     Spacer()
+                    
                     VStack{
                         Spacer()
+                        
                         // GPS Button
                         Button {
-                            // TODO: hente faktisk brukeren sin informasjon
+                            updateUserLocation()
                             location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
                         } label: {
                             Image(systemName: "location.fill")

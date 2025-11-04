@@ -22,7 +22,8 @@ struct CafeAnimationView: View {
         VStack {
             Text(" ☕️")
                 .font(Font.system(size: 30))
-            ZStack{
+            
+            ZStack {
                 Text("💨")
                     .rotationEffect(.degrees(270))
                     .font(Font.system(size: 10))
@@ -35,6 +36,7 @@ struct CafeAnimationView: View {
                                 opacity1 = 0
                             }
                     }
+                
                 Text("💨")
                     .rotationEffect(.degrees(270))
                     .font(Font.system(size: 7))
@@ -47,6 +49,7 @@ struct CafeAnimationView: View {
                                 opacity2 = 0
                             }
                     }
+                
                 Text("💨")
                     .rotationEffect(.degrees(270))
                     .font(Font.system(size: 5))
@@ -60,8 +63,8 @@ struct CafeAnimationView: View {
                                 opacity3 = 0
                             }
                     }
-            }
-        }
+            } // End VStack
+        } // End VStack
         .padding(.top, 20)
     }
 }

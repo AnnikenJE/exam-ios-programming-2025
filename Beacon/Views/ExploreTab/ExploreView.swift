@@ -7,9 +7,13 @@
 import SwiftUI
 import MapKit
 import SwiftData
+import Foundation
 
 struct ExploreView: View {
     
+    // State object
+    @ObservedObject var viewModel: LocationViewModel
+
     // AppStorage
     @AppStorage("latitude") private var latitude = 59.9111
     @AppStorage("longitude") private var longitude = 10.7503
@@ -36,19 +40,26 @@ struct ExploreView: View {
     @State private var isLoading = false
     @State private var translatedCategory = "Restaurant"
     
-    // Default location on startup, Oslo Central Station 59.9111 10.7503
+    // Default location on startup, Oslo Central Station 59.9111 10.750
     @State private var location: MapCameraPosition = .region(
         MKCoordinateRegion(center:
                             CLLocationCoordinate2D(latitude: 59.9111 , longitude: 10.7503),
                            span:
                             MKCoordinateSpan.init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
+
     
     func getDataFromAPI() async {
         // TODO: Fiks rotet u denne
         do {
+            
             isLoading = true
             errorMessage = nil
+            
+            
             getCategory()
+            
+            //longitude = location.region?.center.latitude.flatMap(MapCameraPosition.region) ?? location
+            //latitude= location.region?.center.latitude.flatMap(MapCameraPosition.region) ?? location
             
             let APIkey = APIKey.geoapifyAPIKey
             // TODO: Fjerne utropstegn i url, det kan kræsje
@@ -93,7 +104,7 @@ struct ExploreView: View {
                     ProgressView("Henter steder...")
                 } else {
                     if(isMapShowing) {
-                        ExploreMapView(places: $places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
+                        ExploreMapView(LocationViewModel: viewModel, places: $places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
                         ExploreListView(places: $places, translatedCategory: $translatedCategory)
                     }
@@ -158,5 +169,5 @@ struct ExploreView: View {
 }
 
 #Preview {
-    ExploreView()
+    ExploreView(viewModel: LocationViewModel())
 }
