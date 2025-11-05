@@ -55,11 +55,7 @@ struct ExploreView: View {
             isLoading = true
             errorMessage = nil
             
-            
             getCategory()
-            
-            //longitude = location.region?.center.latitude.flatMap(MapCameraPosition.region) ?? location
-            //latitude= location.region?.center.latitude.flatMap(MapCameraPosition.region) ?? location
             
             let APIkey = APIKey.geoapifyAPIKey
             // TODO: Fjerne utropstegn i url, det kan kræsje

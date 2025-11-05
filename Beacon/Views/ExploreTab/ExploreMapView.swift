@@ -28,8 +28,11 @@ struct ExploreMapView: View {
         LocationViewModel.requestLocation()
         print(LocationViewModel.authorizationStatus)
         print(LocationViewModel.locationString)
-        latitude = LocationViewModel.location?.coordinate.latitude ?? latitude
-        longitude = LocationViewModel.location?.coordinate.longitude ??  longitude
+
+        if let userlocation = LocationViewModel.location?.coordinate {
+            latitude = userlocation.latitude
+            longitude = userlocation.longitude
+        }
     }
     
     // --------------------------------------- Body
@@ -54,6 +57,11 @@ struct ExploreMapView: View {
                         }
                     }
                 } // End Map
+                //TODO: FORKLARE + KILDE
+                .onMapCameraChange { location in
+                    latitude = location.region.center.latitude
+                    longitude = location.region.center.longitude
+                }
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
                     
