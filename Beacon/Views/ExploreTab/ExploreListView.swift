@@ -24,7 +24,6 @@ struct ExploreListView: View {
                 //TODO: Gjøre at den viser feks resturant og ikke steder
                 Text("Vennligst oppdater for å vise steder.")
                     .foregroundStyle(Color.gray)
-                
             } else {
                 List(places, id: \.self){ place in
                     ForEach(place.features, id: \.self) { feature in
@@ -59,7 +58,8 @@ struct ExploreListView: View {
                 }
                 .padding(.top, 60)
             }
-        }// End NavigationStack
-    }
+            
+        } // End NavigationStack
+    } // End View
 }
 

@@ -4,6 +4,8 @@
 //
 //  Kandidatnummer 97
 
+// Animation for places: Resturant
+
 import SwiftUI
 
 struct ResturantAnimationView: View {
@@ -20,9 +22,10 @@ struct ResturantAnimationView: View {
                 withAnimation(.easeInOut(duration: 1)){
                     degrees = 360}
             }
-    }
+    } // End body
 }
 
+// --------------------------------------- Preview
 #Preview {
     ResturantAnimationView()
 }

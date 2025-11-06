@@ -4,6 +4,8 @@
 //
 //  Kandidatnummer 97
 
+// Animation for places: Hotel
+
 import SwiftUI
 
 struct HotelAnimationView: View {
@@ -20,9 +22,10 @@ struct HotelAnimationView: View {
                     scale = 1.0
                 }
             }   .scaleEffect(scale)
-    }
+    } // End Body
 }
 
+// --------------------------------------- Preview
 #Preview {
     HotelAnimationView()
 }

@@ -20,10 +20,11 @@ struct ExploreMapView: View {
     @Binding var longitude: Double
     @Binding var translatedCategory: String
     
-    //States
+    // States
     @State private var selectedPlace: Feature? = nil
     @State private var isSheetPresented = false
 
+    // Functions
     func updateUserLocation() {
         LocationViewModel.requestLocation()
         print(LocationViewModel.authorizationStatus)
@@ -40,10 +41,10 @@ struct ExploreMapView: View {
         NavigationStack{
             ZStack {
                 Map(position: $location){
+                    
                     ForEach(places, id: \.self) { place in
                         ForEach(place.features, id: \.self) { place in
                             
-                            //TODO: Fiks kordinatene
                             Annotation(place.properties.name, coordinate: CLLocationCoordinate2D(latitude: place.properties.lat, longitude: place.properties.lon)){
                                 Button {
                                     selectedPlace = place

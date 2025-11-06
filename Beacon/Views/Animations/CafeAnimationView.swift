@@ -4,6 +4,8 @@
 //
 //  Kandidatnummer 97
 
+// Animation for places: Cafe
+
 import SwiftUI
 
 struct CafeAnimationView: View {
@@ -66,10 +68,10 @@ struct CafeAnimationView: View {
             } // End VStack
         } // End VStack
         .padding(.top, 20)
-    }
+    } // End body
 }
 
-
+// --------------------------------------- Preview
 #Preview {
     CafeAnimationView()
 }

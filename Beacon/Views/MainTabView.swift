@@ -4,7 +4,10 @@
 //
 // Kandidatnr 97
 
+// Tab bar
+
 import SwiftUI
+import SwiftData
 
 struct MainTabView: View {
     
@@ -20,10 +23,12 @@ struct MainTabView: View {
                     Label("Mine steder", systemImage: "pin")
                 }
         }
+        .modelContainer(for: [SavedPlace.self, Rating.self])
         .tint(Color.beaconOrange)
     }
 }
 
+// --------------------------------------- Preview
 #Preview {
     MainTabView()
 }

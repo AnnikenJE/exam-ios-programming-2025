@@ -4,6 +4,8 @@
 //
 // Kandidatnr 97
 
+// Viewmodel for tracking user location
+
 import SwiftUI
 import Foundation
 import Combine

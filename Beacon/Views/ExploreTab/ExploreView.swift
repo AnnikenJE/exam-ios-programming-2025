@@ -6,7 +6,6 @@
 
 import SwiftUI
 import MapKit
-import SwiftData
 import Foundation
 
 struct ExploreView: View {
@@ -24,12 +23,6 @@ struct ExploreView: View {
         case cafe
         case hotel
     }
-    
-    // Enviroments (ikke brukt enda), må muligens fjernes om den ikke blir brukt
-    //@Environment(\.modelContext) private var ModelContext
-    
-    // Query
-    // @Query private var mapLocation: [MapLocation] Denne skal ikke brukes men har den til eksempel senere
     
     // States
     @State private var category = "catering.resturant"
@@ -164,6 +157,7 @@ struct ExploreView: View {
     } // End body
 }
 
+// --------------------------------------- Preview
 #Preview {
     ExploreView(viewModel: LocationViewModel())
 }
