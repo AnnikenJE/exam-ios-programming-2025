@@ -20,6 +20,9 @@ struct PlaceDetailsView: View {
     @Binding var place: Feature?
     @Binding var translatedCategory: String
     
+    // Querys
+    @Query private var allSavedPlaces: [SavedPlace]
+    
     // States
     @State private var oneStarReview = false
     @State private var twoStarReview = false
@@ -27,6 +30,7 @@ struct PlaceDetailsView: View {
     @State private var fourStarReview = false
     @State private var fiveStarReview = false
     @State private var starRating = 0
+    
     
     // Functions
     // TODO: Kilde
@@ -36,18 +40,44 @@ struct PlaceDetailsView: View {
         }
     }
     
+    
+    
     func ratePlace(){
+        
         if place == nil{
+            print("Place == nil")
             return
         }
-        let newPlace = SavedPlace(name: place?.properties.name ?? "No name", adress: place?.properties.addressLine ?? "No adress", ratings: [])
-        let newRating = Rating(savedPlace: newPlace, stars: starRating)
+        
+        let placeName = place?.properties.name ?? "Ingen navn."
+        let placeAdress = place?.properties.addressLine ?? "Ingen adresse"
+        
+        let existingPlace = allSavedPlaces.first(where: { saved in
+            saved.name == placeName && saved.adress == placeAdress})
         
         do {
-            newPlace.ratings.append(newRating)
-            modelContext.insert(newPlace)
+            
+            let newPlaceToRate: SavedPlace
+            
+            if let existing = existingPlace {
+                newPlaceToRate = existing
+                
+                print("existing place:", existing.name)
+            } else {
+                let newPlace = SavedPlace(name: placeName, adress: placeAdress, ratings: [])
+                modelContext.insert(newPlace)
+                newPlaceToRate = newPlace
+                
+
+                print("new place:", newPlace.name)
+            
+             }
+            
+            let newRating = Rating(savedPlace: newPlaceToRate, stars: starRating)
+            modelContext.insert(newRating)
+            
             try modelContext.save()
-            print(newPlace)
+            
         } catch {
             print("Could not rate place and put into database: \(error)")
         }

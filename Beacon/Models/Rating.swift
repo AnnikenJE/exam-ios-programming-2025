@@ -10,12 +10,12 @@ import SwiftData
 import Foundation
 
 @Model
-class Rating: Identifiable {
+class Rating {
     
     var id: UUID
-    var savedPlace: SavedPlace
     var stars: Int
     var date: Date
+    var savedPlace: SavedPlace
     
     init(savedPlace: SavedPlace, stars: Int) {
         self.id = UUID()

@@ -32,6 +32,9 @@ struct ExploreView: View {
     @State private var errorMessage: String? = nil
     @State private var isLoading = false
     @State private var translatedCategory = "Restaurant"
+    @State private var radius = 1000
+    @State private var searchText = ""
+    @State private var isSearching = false
     
     // Default location on startup, Oslo Central Station 59.9111 10.750
     @State private var location: MapCameraPosition = .region(
@@ -52,7 +55,7 @@ struct ExploreView: View {
             
             let APIkey = APIKey.geoapifyAPIKey
             // TODO: Fjerne utropstegn i url, det kan kræsje
-            let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),1000&limit=10&apiKey=\(APIkey)")!
+            let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(radius)&limit=10&apiKey=\(APIkey)")!
             // TODO: Slett print
             print(url)
             let (data, response) = try await URLSession.shared.data(from: url)
@@ -101,6 +104,7 @@ struct ExploreView: View {
                 
                 VStack {
                     HStack {
+                      //  Slider(value: <#T##Binding<BinaryFloatingPoint>#>)
                         Spacer()
                         // Toggle for showing map or list
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
@@ -150,10 +154,13 @@ struct ExploreView: View {
                             .foregroundStyle(Color.beaconOrange)
                     }
                 }
+                
+                
             }
             .toolbarBackground(Color.deepBlue, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)
-        } // End NavigationView
+        } // End NavigationStack
+        .searchable(text: $searchText)
     } // End body
 }
 

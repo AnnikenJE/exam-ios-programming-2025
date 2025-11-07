@@ -19,7 +19,7 @@ class SavedPlace {
     @Relationship(deleteRule:.cascade, inverse: \Rating.savedPlace)
     var ratings: [Rating]
     
-    init(name: String, adress: String, ratings: [Rating]) {
+    init(name: String, adress: String, ratings: [Rating] = []) {
         self.id = UUID()
         self.name = name
         self.adress = adress
