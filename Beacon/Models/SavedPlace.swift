@@ -14,15 +14,15 @@ class SavedPlace {
     
     var id: UUID
     var name: String
-    var adress: String
+    var address: String
     
     @Relationship(deleteRule:.cascade, inverse: \Rating.savedPlace)
     var ratings: [Rating]
     
-    init(name: String, adress: String, ratings: [Rating] = []) {
+    init(name: String, address: String, ratings: [Rating] = []) {
         self.id = UUID()
         self.name = name
-        self.adress = adress
+        self.address = address
         self.ratings = ratings
     }
 }

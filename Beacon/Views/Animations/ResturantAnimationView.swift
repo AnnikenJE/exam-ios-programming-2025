@@ -19,7 +19,7 @@ struct ResturantAnimationView: View {
             .font(.system(size: 30))
             .rotationEffect(.degrees(degrees))
             .onAppear{
-                withAnimation(.easeInOut(duration: 1)){
+                withAnimation(.easeInOut(duration: 1).delay(0.3)){
                     degrees = 360}
             }
     } // End body

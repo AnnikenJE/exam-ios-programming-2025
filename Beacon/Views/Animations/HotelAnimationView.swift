@@ -18,7 +18,7 @@ struct HotelAnimationView: View {
         Text("🏨")
             .font(Font.system(size: 30))
             .onAppear{
-                withAnimation(.spring(bounce: 0.8)){
+                withAnimation(.spring(bounce: 0.8).delay(0.3)){
                     scale = 1.0
                 }
             }   .scaleEffect(scale)

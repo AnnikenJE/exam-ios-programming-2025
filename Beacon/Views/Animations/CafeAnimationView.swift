@@ -22,7 +22,7 @@ struct CafeAnimationView: View {
     // --------------------------------------- Body
     var body: some View {
         VStack {
-            Text(" ☕️")
+            Text("☕️")
                 .font(Font.system(size: 30))
             
             ZStack {
@@ -34,7 +34,7 @@ struct CafeAnimationView: View {
                     .onAppear {
                         withAnimation(.easeOut(duration: 5)
                             .repeatForever()){
-                                offsetY1 = -60
+                                offsetY1 = -55
                                 opacity1 = 0
                             }
                     }
@@ -47,7 +47,7 @@ struct CafeAnimationView: View {
                     .onAppear {
                         withAnimation(.easeOut(duration: 5).delay(0.6)
                             .repeatForever()){
-                                offsetY2 = -60
+                                offsetY2 = -55
                                 opacity2 = 0
                             }
                     }
@@ -61,7 +61,7 @@ struct CafeAnimationView: View {
                         withAnimation(.easeOut(duration: 5).delay(
                             1.2)
                             .repeatForever()){
-                                offsetY3 = -60
+                                offsetY3 = -55
                                 opacity3 = 0
                             }
                     }

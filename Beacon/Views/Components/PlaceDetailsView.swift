@@ -50,10 +50,10 @@ struct PlaceDetailsView: View {
         }
         
         let placeName = place?.properties.name ?? "Ingen navn."
-        let placeAdress = place?.properties.addressLine ?? "Ingen adresse"
+        let placeAddress = place?.properties.addressLine ?? "Ingen adresse"
         
         let existingPlace = allSavedPlaces.first(where: { saved in
-            saved.name == placeName && saved.adress == placeAdress})
+            saved.name == placeName && saved.address == placeAddress})
         
         do {
             
@@ -64,7 +64,7 @@ struct PlaceDetailsView: View {
                 
                 print("existing place:", existing.name)
             } else {
-                let newPlace = SavedPlace(name: placeName, adress: placeAdress, ratings: [])
+                let newPlace = SavedPlace(name: placeName, address: placeAddress, ratings: [])
                 modelContext.insert(newPlace)
                 newPlaceToRate = newPlace
                 
