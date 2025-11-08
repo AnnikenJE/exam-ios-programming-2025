@@ -65,8 +65,6 @@ struct ExploreMapView: View {
                 }
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
-                    
-                  
                 }
                 .ignoresSafeArea()
                 .onAppear{
@@ -90,9 +88,9 @@ struct ExploreMapView: View {
                         } // End Button label
                         .buttonStyleModifier()
                         .padding()
-                    }
-                }
-            }
+                    } // End VStack
+                } // End HStack
+            }// End ZStack
         }// End NavigationStack
     }
 }

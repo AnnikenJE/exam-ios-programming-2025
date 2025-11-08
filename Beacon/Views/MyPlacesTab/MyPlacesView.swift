@@ -17,7 +17,7 @@ struct MyPlacesView: View {
     // States
     @State private var isSheetPresented = false
     
-    //TODO: Legge til delete?
+    //TODO: Legge til delete
 
     
     // --------------------------------------- Body

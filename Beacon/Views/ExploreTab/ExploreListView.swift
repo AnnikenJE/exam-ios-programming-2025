@@ -58,7 +58,6 @@ struct ExploreListView: View {
                 }
                 .padding(.top, 60)
             }
-            
         } // End NavigationStack
     } // End View
 }

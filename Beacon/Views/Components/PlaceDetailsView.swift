@@ -9,6 +9,8 @@
 import SwiftUI
 import SwiftData
 
+// TODO: Lage star ratingRatingView og singleStarRatingView + openInAppleMaps
+
 struct PlaceDetailsView: View {
     
     // Enviroments
@@ -24,58 +26,46 @@ struct PlaceDetailsView: View {
     @Query private var allSavedPlaces: [SavedPlace]
     
     // States
-    @State private var oneStarReview = false
     @State private var twoStarReview = false
     @State private var threeStarReview = false
     @State private var fourStarReview = false
     @State private var fiveStarReview = false
-    @State private var starRating = 0
+    @State private var starRating = 1
     
     
     // Functions
-    // TODO: Kilde
     func openAppleMaps(){
-        if let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")") {
-            openURL(url)
+        guard let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")")
+        else {
+            return
         }
+        openURL(url)
     }
     
-    
-    
     func ratePlace(){
-        
-        if place == nil{
-            print("Place == nil")
+        guard let place = place else {
+            print("Place == nil in ratePlace.")
             return
         }
         
-        let placeName = place?.properties.name ?? "Ingen navn."
-        let placeAddress = place?.properties.addressLine ?? "Ingen adresse"
-        
+        let placeName = place.properties.name
+        let placeAddress = place.properties.addressLine
         let existingPlace = allSavedPlaces.first(where: { saved in
             saved.name == placeName && saved.address == placeAddress})
         
         do {
-            
             let newPlaceToRate: SavedPlace
             
             if let existing = existingPlace {
                 newPlaceToRate = existing
-                
-                print("existing place:", existing.name)
             } else {
                 let newPlace = SavedPlace(name: placeName, address: placeAddress, ratings: [])
                 modelContext.insert(newPlace)
                 newPlaceToRate = newPlace
-                
-
-                print("new place:", newPlace.name)
-            
              }
             
             let newRating = Rating(savedPlace: newPlaceToRate, stars: starRating)
             modelContext.insert(newRating)
-            
             try modelContext.save()
             
         } catch {
@@ -136,7 +126,7 @@ struct PlaceDetailsView: View {
                         }
                         
                         HStack{
-                            Text("Kordinater")
+                            Text("Koordinater")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text("latitude \(place?.properties.lat ?? 0.0), \nlongitude \(place?.properties.lon ?? 0.0)")
@@ -159,33 +149,28 @@ struct PlaceDetailsView: View {
                     VStack{
                         HStack(spacing: 15){
                             Button {
-                                oneStarReview = true
                                 twoStarReview = false
                                 threeStarReview = false
                                 fourStarReview = false
                                 fiveStarReview = false
                                 starRating = 1
-                                
                             } label: {
-                                Image(systemName: oneStarReview  ? "star.fill" : "star")
+                                Image(systemName: "star.fill")
                             }
                             .foregroundStyle(.highlightOrange)
                             
                             Button {
-                                oneStarReview = true
                                 twoStarReview = true
                                 threeStarReview = false
                                 fourStarReview = false
                                 fiveStarReview = false
                                 starRating = 2
-                                
                             } label: {
                                 Image(systemName: twoStarReview ? "star.fill" : "star")
                             }
                             .foregroundStyle(.highlightOrange)
                             
                             Button {
-                                oneStarReview = true
                                 twoStarReview = true
                                 threeStarReview = true
                                 fourStarReview = false
@@ -197,7 +182,6 @@ struct PlaceDetailsView: View {
                             .foregroundStyle(.highlightOrange)
                             
                             Button {
-                                oneStarReview = true
                                 twoStarReview = true
                                 threeStarReview = true
                                 fourStarReview = true
@@ -209,7 +193,6 @@ struct PlaceDetailsView: View {
                             .foregroundStyle(.highlightOrange)
                             
                             Button {
-                                oneStarReview = true
                                 twoStarReview = true
                                 threeStarReview = true
                                 fourStarReview = true
@@ -220,7 +203,6 @@ struct PlaceDetailsView: View {
                             }
                             .foregroundStyle(.highlightOrange)
                             
-                            
                             Button{
                                 ratePlace()
                             } label: {
@@ -228,7 +210,6 @@ struct PlaceDetailsView: View {
                             }
                             .buttonStyleModifier()
                         } // End HStack with stars
-                        
                     }
                     .padding()
                 } // End Section
@@ -265,10 +246,8 @@ struct PlaceDetailsView: View {
                     .buttonStyleModifier()
                 }
             } // End .toolbar
-            
         } // End navigationStack
     } // End body
-    
 }
 
 // --------------------------------------- Preview

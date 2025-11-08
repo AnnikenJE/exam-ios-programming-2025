@@ -26,7 +26,7 @@ struct ExploreView: View {
     }
     
     // States
-    @State private var category = "catering.resturant"
+    @State private var category = "catering.restaurant"
     @State private var selectedCategory: Category = .restaurant
     @State private var isMapShowing = true
     @State private var places: [Places] = []
@@ -45,18 +45,20 @@ struct ExploreView: View {
                             MKCoordinateSpan.init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
     
     
+    // Functions
     func getDataFromAPI() async {
-        // TODO: Fiks rotet u denne
         do {
-            
             isLoading = true
             errorMessage = nil
             
             getCategory()
             
             let APIkey = APIKey.geoapifyAPIKey
-            // TODO: Fjerne utropstegn i url, det kan kræsje
-            let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))&limit=10&apiKey=\(APIkey)")!
+            
+            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))&limit=10&apiKey=\(APIkey)") else {
+                print("Invalid URL in getDataFromAPI().")
+                return
+            }
             // TODO: Slett print
             print(url)
             let (data, response) = try await URLSession.shared.data(from: url)
@@ -92,7 +94,6 @@ struct ExploreView: View {
         NavigationStack {
             ZStack {
                 
-                //TODO: Gjøre til funksjon?
                 if(isLoading){
                     ProgressView("Henter steder...")
                 } else {
@@ -110,8 +111,7 @@ struct ExploreView: View {
                                onEditingChanged: { sliding in
                             isSliding = sliding
                             
-                        }
-                        )
+                        })
                         Spacer()
                         // Toggle for showing map or list
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
@@ -161,8 +161,6 @@ struct ExploreView: View {
                             .foregroundStyle(Color.beaconOrange)
                     }
                 }
-                
-                
             }
             .toolbarBackground(Color.deepBlue, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)
