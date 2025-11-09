@@ -65,7 +65,7 @@ struct AverageStarRatingView: View {
         }
 }
 
-
+// --------------------------------------- Preview
 #Preview {
     AverageStarRatingView(stars: [1, 2, 5, 4, 3])
 }

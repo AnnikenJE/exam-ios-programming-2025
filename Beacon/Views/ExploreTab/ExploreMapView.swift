@@ -39,7 +39,6 @@ struct ExploreMapView: View {
     // Querys
     @Query private var allSavedPlaces: [SavedPlace]
     
-
     // --------------------------------------- Body
     var body: some View {
         NavigationStack{
@@ -93,7 +92,6 @@ struct ExploreMapView: View {
                 
                 HStack() {
                     Spacer()
-                    
                     VStack{
                         Spacer()
                         

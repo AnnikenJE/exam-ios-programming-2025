@@ -16,37 +16,48 @@ struct MyPlacesView: View {
     // Enviroments
     @Environment(\.modelContext) private var modelContext
     
-    // States
-//    @State private var isSheetPresented = false
-    //    @State private var selectedPlace: SavedPlace? = nil
-    
     // --------------------------------------- Body
     var body: some View {
         NavigationStack{
             ScrollView{
-                Section(header: Text("Mine rangerte steder")){
+                Section {
                     ForEach(allSavedPlaces) { place in
-                        Button(place.name){
-//                            isSheetPresented = true
-//                            selectedPlace = place
+                        HStack{
+                            Spacer()
+                            Text(place.name)
+                                .font(.headline.bold())
+                                .padding()
+                            
+                            AverageStarRatingView(stars: place.ratings.map { $0.stars})
+                                .padding()
+                            Spacer()
                         }
-                        AverageStarRatingView(stars: place.ratings.map { $0.stars})
-                        Section("Rangeringer"){
+                        Section {
                             ForEach(place.ratings){ rating in
-                                HStack{
+                                HStack(){
                                     Spacer()
-                                    Text(rating.date.formatted(.dateTime.day().month().year()))
+                                    Text("Date: \(rating.date.formatted(.dateTime.day().month().year()))")
                                     Spacer()
-                                    Text("\(rating.stars)")
+                                    Text("\(rating.stars) stars")
+                                    Image(systemName: "star.fill")
+                                        .foregroundStyle(Color.beaconOrange)
                                     Spacer()
                                 }
-                            }
+                                .padding(10)
+                                .background(Color.accentColor.opacity(0.3))
+                                .frame(maxWidth: 300)
+                                .cornerRadius(18)
+                           }
                         }
                     }
-                    .navigationTitle("Mine steder")
-//                    .sheet(isPresented: $isSheetPresented){
-//                        PlaceDetailsView(place: $selectedPlace)
-//                    }
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar{
+                ToolbarItem(placement: .title) {
+                    Text("Mine Steder")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(Color.beaconOrange)
                 }
             }
         }

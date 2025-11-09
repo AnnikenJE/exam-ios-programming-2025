@@ -75,9 +75,7 @@ struct ExploreListView: View {
                                                 .font(.subheadline)
                                                 .foregroundStyle(Color.gray)
                                         }
-
                                     }
- 
                                 }
                             }
                         }

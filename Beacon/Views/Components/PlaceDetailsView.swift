@@ -99,8 +99,6 @@ struct PlaceDetailsView: View {
         NavigationStack {
             VStack {
                 Form {
-
-                    
                     // Section
                     Section("Informasjon"){
                         HStack{
@@ -181,7 +179,6 @@ struct PlaceDetailsView: View {
                     } // End Section
                 } // End Form
                 
-                
                 // Section
                 Section("Vurder"){
                     VStack{
@@ -243,6 +240,8 @@ struct PlaceDetailsView: View {
                             
                             Button{
                                 ratePlace()
+                                findPlaceInDatabase()
+
                             } label: {
                                 Image(systemName: "plus")
                             }

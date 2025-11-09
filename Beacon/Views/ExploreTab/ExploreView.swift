@@ -90,7 +90,6 @@ struct ExploreView: View {
         }
     }
     
-    
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
