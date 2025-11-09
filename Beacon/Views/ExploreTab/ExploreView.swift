@@ -7,6 +7,7 @@
 import SwiftUI
 import MapKit
 import Foundation
+import SwiftData
 
 struct ExploreView: View {
     
@@ -88,6 +89,7 @@ struct ExploreView: View {
             translatedCategory = "Restaurant"
         }
     }
+    
     
     // --------------------------------------- Body
     var body: some View {

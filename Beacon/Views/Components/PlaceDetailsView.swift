@@ -31,6 +31,7 @@ struct PlaceDetailsView: View {
     @State private var fourStarReview = false
     @State private var fiveStarReview = false
     @State private var starRating = 1
+    @State private var ratingsToInt: [Int] = []
     
     
     // Functions
@@ -48,6 +49,8 @@ struct PlaceDetailsView: View {
             return
         }
         
+        // TODO: ENGELSK ELLER FJERN
+        // Unødvendig mye kode - konsekvens av det som står i SavedPlace
         let placeName = place.properties.name
         let placeAddress = place.properties.addressLine
         let placeCategory = translatedCategory
@@ -81,18 +84,45 @@ struct PlaceDetailsView: View {
         }
     }
     
+    func findPlaceInDatabase() {
+        
+        let matchingPlace = allSavedPlaces.first{ saved in
+            saved.name == place?.properties.name
+        }
+        
+        ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
+        
+    }
+    
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
             VStack {
                 Form {
+
+                    
                     // Section
                     Section("Informasjon"){
+                        HStack{
+                            Text("Vurdering")
+                                .foregroundStyle(Color(.gray))
+                            Spacer()
+                            if !ratingsToInt.isEmpty{
+                                    AverageStarRatingView(stars: ratingsToInt)
+                                    .offset(x: 0, y: 15)
+                                    .padding(.bottom, 20)
+                                    .padding(.trailing, 10)
+                            } else{
+                                Text("Ingen vurderinger.")
+                            }
+                        }
+                        
                         HStack{
                             Text("Kategori")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text(translatedCategory)
+
                         }
                         
                         HStack{
@@ -255,6 +285,9 @@ struct PlaceDetailsView: View {
                 }
             } // End .toolbar
         } // End navigationStack
+        .onAppear{
+            findPlaceInDatabase()
+        }
     } // End body
 }
 

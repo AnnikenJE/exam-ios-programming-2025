@@ -16,6 +16,7 @@ struct AverageStarRatingView: View {
     // States
     @State private var averageRating = 0.0
     
+    // Functions
     func calculateAverage(){
         var sum = 0
         
@@ -24,7 +25,6 @@ struct AverageStarRatingView: View {
         }
         averageRating = Double(sum) / Double(stars.count)
     }
-    
     
     // --------------------------------------- Body
     var body: some View {
@@ -35,6 +35,13 @@ struct AverageStarRatingView: View {
                 Image(systemName: "star")
                     .resizable()
                     .foregroundStyle(Color.highlightOrange)
+                    .background(
+                        Image(systemName: "square.fill")
+                            .resizable()
+                             .frame(width: 60, height: 30)
+                             .foregroundStyle(.gray.opacity(0.3))
+                             .offset(x: -8)
+                    )
                 
                 GeometryReader{ geo in
                     Rectangle()
@@ -45,9 +52,9 @@ struct AverageStarRatingView: View {
                     Image(systemName: "star.fill")
                         .resizable()
                         .foregroundStyle(Color.highlightOrange))
-                
+
             }
-            .frame(width: 30, height: 30)
+            .frame(width: 20, height: 20)
         }
             .onAppear{
                 calculateAverage()

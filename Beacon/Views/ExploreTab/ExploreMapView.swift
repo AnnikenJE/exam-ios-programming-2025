@@ -23,19 +23,23 @@ struct ExploreMapView: View {
     // States
     @State private var selectedPlace: Feature? = nil
     @State private var isSheetPresented = false
-
+    
     // Functions
     func updateUserLocation() {
         LocationViewModel.requestLocation()
         print(LocationViewModel.authorizationStatus)
         print(LocationViewModel.locationString)
-
+        
         if let userlocation = LocationViewModel.location?.coordinate {
             latitude = userlocation.latitude
             longitude = userlocation.longitude
         }
     }
     
+    // Querys
+    @Query private var allSavedPlaces: [SavedPlace]
+    
+
     // --------------------------------------- Body
     var body: some View {
         NavigationStack{
@@ -45,7 +49,21 @@ struct ExploreMapView: View {
                     ForEach(places, id: \.self) { place in
                         ForEach(place.features, id: \.self) { place in
                             
+                            let matchingPlace = allSavedPlaces.first{ saved in
+                                saved.name == place.properties.name
+                            }
+                            
+                            let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
+                            
+                            
                             Annotation(place.properties.name, coordinate: CLLocationCoordinate2D(latitude: place.properties.lat, longitude: place.properties.lon)){
+                                
+                                VStack {
+                                    if !ratingsToInt.isEmpty{
+                                            AverageStarRatingView(stars: ratingsToInt)
+                                                .offset(x: 0, y: 15)
+                                    }
+                                }
                                 Button {
                                     selectedPlace = place
                                     isSheetPresented = true
@@ -65,11 +83,12 @@ struct ExploreMapView: View {
                 }
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
+                    
                 }
                 .ignoresSafeArea()
                 .onAppear{
                     // Updating camera location
-                    location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
+                    location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
                 }
                 
                 HStack() {
@@ -81,7 +100,7 @@ struct ExploreMapView: View {
                         // GPS Button
                         Button {
                             updateUserLocation()
-                            location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
+                            location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
                         } label: {
                             Image(systemName: "location.fill")
                                 .font(.system(size: 20, weight: .bold))

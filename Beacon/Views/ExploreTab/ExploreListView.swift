@@ -5,6 +5,7 @@
 // Kandidatnr 97
 
 import SwiftUI
+import SwiftData
 
 struct ExploreListView: View {
     
@@ -15,6 +16,9 @@ struct ExploreListView: View {
     // States
     @State private var isSheetPresented = false
     @State private var selectedPlace: Feature? = nil
+    
+    // Querys
+    @Query private var allSavedPlaces: [SavedPlace]
     
     // --------------------------------------- Body
     var body: some View {
@@ -27,6 +31,13 @@ struct ExploreListView: View {
             } else {
                 List(places, id: \.self){ place in
                     ForEach(place.features, id: \.self) { feature in
+                        
+                        let matchingPlace = allSavedPlaces.first{ saved in
+                            saved.name == feature.properties.name
+                        }
+                        
+                        let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
+                        
                         Button{
                             selectedPlace = feature
                             isSheetPresented = true
@@ -40,7 +51,7 @@ struct ExploreListView: View {
                                         .font(.headline)
                                         .multilineTextAlignment(.trailing)
                                 }
-                                
+
                                 HStack{
                                     Text("Adresse")
                                         .foregroundStyle(Color.gray)
@@ -48,6 +59,25 @@ struct ExploreListView: View {
                                     Text(feature.properties.addressLine)
                                         .font(.subheadline)
                                         .multilineTextAlignment(.trailing)
+                                }
+                                HStack{
+                                    Text("Rating")
+                                        .foregroundStyle(Color.gray)
+                                    Spacer()
+                                    VStack{
+                                        if !ratingsToInt.isEmpty{
+                                            AverageStarRatingView(stars: ratingsToInt)
+                                                .offset(x: 0, y: 15)
+                                                .padding(.bottom, 20)
+                                                .padding(.trailing, 10)
+                                        } else {
+                                            Text("Ingen rating.")
+                                                .font(.subheadline)
+                                                .foregroundStyle(Color.gray)
+                                        }
+
+                                    }
+ 
                                 }
                             }
                         }
