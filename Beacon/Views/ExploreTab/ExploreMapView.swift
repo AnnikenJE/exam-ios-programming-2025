@@ -88,9 +88,9 @@ struct ExploreMapView: View {
                         } // End Button label
                         .buttonStyleModifier()
                         .padding()
-                    } // End VStack
-                } // End HStack
-            }// End ZStack
+                    }
+                }
+            }
         }// End NavigationStack
     }
 }

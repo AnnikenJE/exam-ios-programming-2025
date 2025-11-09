@@ -17,7 +17,7 @@ struct MyPlacesView: View {
     @Environment(\.modelContext) private var modelContext
     
     // States
-    //    @State private var isSheetPresented = false
+//    @State private var isSheetPresented = false
     //    @State private var selectedPlace: SavedPlace? = nil
     
     // --------------------------------------- Body
@@ -30,7 +30,7 @@ struct MyPlacesView: View {
 //                            isSheetPresented = true
 //                            selectedPlace = place
                         }
-                        
+                        AverageStarRatingView(stars: place.ratings.map { $0.stars})
                         Section("Rangeringer"){
                             ForEach(place.ratings){ rating in
                                 HStack{

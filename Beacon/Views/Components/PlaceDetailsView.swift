@@ -21,7 +21,7 @@ struct PlaceDetailsView: View {
     // Bindings
     @Binding var place: Feature? 
     @Binding var translatedCategory: String
-    
+ 
     // Querys
     @Query private var allSavedPlaces: [SavedPlace]
     
