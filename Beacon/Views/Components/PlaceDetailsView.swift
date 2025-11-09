@@ -19,7 +19,7 @@ struct PlaceDetailsView: View {
     @Environment(\.modelContext) private var modelContext
     
     // Bindings
-    @Binding var place: Feature?
+    @Binding var place: Feature? 
     @Binding var translatedCategory: String
     
     // Querys
@@ -50,6 +50,14 @@ struct PlaceDetailsView: View {
         
         let placeName = place.properties.name
         let placeAddress = place.properties.addressLine
+        let placeCategory = translatedCategory
+        let placePhone = place.properties.contact?.phone
+        let placeEmail = place.properties.contact?.email
+        let placeOpeningHours = place.properties.openingHours
+        let placeWebsite = place.properties.website
+        let placeLon = place.properties.lon
+        let placeLat = place.properties.lat
+        
         let existingPlace = allSavedPlaces.first(where: { saved in
             saved.name == placeName && saved.address == placeAddress})
         
@@ -59,7 +67,7 @@ struct PlaceDetailsView: View {
             if let existing = existingPlace {
                 newPlaceToRate = existing
             } else {
-                let newPlace = SavedPlace(name: placeName, address: placeAddress, ratings: [])
+                let newPlace = SavedPlace(name: placeName, address: placeAddress, ratings: [], category: placeCategory, phone: placePhone, email: placeEmail, openingHours: placeOpeningHours, website: placeWebsite, lon: placeLon, lat: placeLat)
                 modelContext.insert(newPlace)
                 newPlaceToRate = newPlace
              }

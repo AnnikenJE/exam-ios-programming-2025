@@ -112,7 +112,8 @@ struct ExploreView: View {
                             isSliding = sliding
                             
                         })
-                        Spacer()
+                        .frame(width: 200)
+                        Spacer(minLength: 10)
                         // Toggle for showing map or list
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
                             .toggleStyle(.button)
