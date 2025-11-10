@@ -21,4 +21,5 @@ class SearchViewModel: ObservableObject {
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates() // Only assigns if it is changes, and makes sure its diffrent from the previous one
             .assign(to: &$debouncedText) // Assigning it to new variable to save the delayed text
+    }
 }

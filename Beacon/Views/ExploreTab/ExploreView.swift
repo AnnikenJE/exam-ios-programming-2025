@@ -18,7 +18,7 @@ struct ExploreView: View {
     // AppStorage
     @AppStorage("latitude") private var latitude = 59.9111
     @AppStorage("longitude") private var longitude = 10.7503
-    @AppStorage("radius")private var radius = 5000.0
+    @AppStorage("radius") private var radius = 5000.0
     
     // Enum
     enum Category {
@@ -91,8 +91,8 @@ struct ExploreView: View {
         }
     }
     
-   func generateSearchInURL() {
-       if !searchViewModel.debouncedText.isEmpty {
+    func generateSearchInURL() {
+        if !searchViewModel.debouncedText.isEmpty {
             searchTextInURL = "&name=\(searchViewModel.debouncedText)"
         } else {
             searchTextInURL = ""
@@ -103,7 +103,7 @@ struct ExploreView: View {
     func checkIfPlaceIsRated(){
         
     }
-
+    
     
     // --------------------------------------- Body
     var body: some View {
@@ -116,7 +116,9 @@ struct ExploreView: View {
                     if(isMapShowing) {
                         ExploreMapView(LocationViewModel: locationViewModel, places: places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
-                        ExploreListView(places: places, translatedCategory: $translatedCategory)
+                        
+                        ExploreListView(places: places, getDataFromAPI: getDataFromAPI, translatedCategory: $translatedCategory)
+                        
                     }
                 }
                 
@@ -129,6 +131,12 @@ struct ExploreView: View {
                             
                         })
                         .frame(width: 200)
+                        Button {
+                            isFavourite.toggle()
+                        } label: {
+                            Image(systemName: isFavourite ? "star.filled" : "star")
+                        }
+                        .buttonStyleModifier()
                         Spacer(minLength: 10)
                         // Toggle for showing map or list
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)

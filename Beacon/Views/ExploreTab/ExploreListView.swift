@@ -9,8 +9,11 @@ import SwiftData
 
 struct ExploreListView: View {
     
-    //Variables
+    // Variables
     var places: [Places]
+    
+    // Functions from parent
+    var getDataFromAPI: () async -> Void
     
     // Bindings
     @Binding var translatedCategory: String
@@ -26,10 +29,8 @@ struct ExploreListView: View {
     var body: some View {
         NavigationStack {
             
-            if (places.isEmpty) {
-                //TODO: Gjøre at den viser feks resturant og ikke steder
-                Text("Vennligst oppdater for å vise steder.")
-                    .foregroundStyle(Color.gray)
+            if (places.isEmpty){
+                Text("Ingen steder funnet.")
             } else {
                 List(places, id: \.self){ place in
                     ForEach(place.features, id: \.self) { feature in
@@ -53,7 +54,7 @@ struct ExploreListView: View {
                                         .font(.headline)
                                         .multilineTextAlignment(.trailing)
                                 }
-
+                                
                                 HStack{
                                     Text("Adresse")
                                         .foregroundStyle(Color.gray)
@@ -83,10 +84,18 @@ struct ExploreListView: View {
                         }
                     } // End ForEach
                 }   // End List
+                
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
                 }
                 .padding(.top, 60)
+                .refreshable {
+                    
+                    try? await Task.sleep(for: .milliseconds(500))
+                    Task{
+                        await getDataFromAPI()
+                    }
+                }
             }
         } // End NavigationStack
     } // End View
