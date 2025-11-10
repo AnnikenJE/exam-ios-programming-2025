@@ -9,8 +9,10 @@ import SwiftData
 
 struct ExploreListView: View {
     
+    //Variables
+    var places: [Places]
+    
     // Bindings
-    @Binding var places: [Places]
     @Binding var translatedCategory: String
     
     // States

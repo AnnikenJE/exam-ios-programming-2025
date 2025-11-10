@@ -12,7 +12,8 @@ import SwiftData
 struct ExploreView: View {
     
     // State object
-    @ObservedObject var viewModel: LocationViewModel
+    @StateObject var locationViewModel = LocationViewModel()
+    @StateObject var searchViewModel = SearchViewModel()
     
     // AppStorage
     @AppStorage("latitude") private var latitude = 59.9111
@@ -35,16 +36,16 @@ struct ExploreView: View {
     @State private var isLoading = false
     @State private var translatedCategory = "Restaurant"
     @State private var searchText = ""
-    @State private var isSearching = false
+    @State private var searchTextInURL = ""
     @State private var isSliding = false
+    @State private var isFavourite = false
     
     // Default location on startup, Oslo Central Station 59.9111 10.750
     @State private var location: MapCameraPosition = .region(
         MKCoordinateRegion(center:
                             CLLocationCoordinate2D(latitude: 59.9111 , longitude: 10.7503),
                            span:
-                            MKCoordinateSpan.init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
-    
+                            MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
     
     // Functions
     func getDataFromAPI() async {
@@ -53,10 +54,11 @@ struct ExploreView: View {
             errorMessage = nil
             
             getCategory()
+            generateSearchInURL()
             
             let APIkey = APIKey.geoapifyAPIKey
             
-            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))&limit=10&apiKey=\(APIkey)") else {
+            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))\(searchTextInURL)&limit=10&apiKey=\(APIkey)") else {
                 print("Invalid URL in getDataFromAPI().")
                 return
             }
@@ -90,6 +92,19 @@ struct ExploreView: View {
         }
     }
     
+   func generateSearchInURL() {
+        if !searchText.isEmpty {
+            searchTextInURL = "&name=\(searchText)"
+        } else {
+            searchTextInURL = ""
+        }
+    }
+    
+    func checkIfPlaceIsFiveStarRated(){
+        
+    }
+
+    
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
@@ -99,9 +114,9 @@ struct ExploreView: View {
                     ProgressView("Henter steder...")
                 } else {
                     if(isMapShowing) {
-                        ExploreMapView(LocationViewModel: viewModel, places: $places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
+                        ExploreMapView(LocationViewModel: locationViewModel, places: places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
-                        ExploreListView(places: $places, translatedCategory: $translatedCategory)
+                        ExploreListView(places: places, translatedCategory: $translatedCategory)
                     }
                 }
                 
@@ -168,10 +183,18 @@ struct ExploreView: View {
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)
         } // End NavigationStack
         .searchable(text: $searchText)
+        .onChange(of: searchText) { oldSearch , newSearch in
+            //searchViewModel.updateSearch(userSearchInput: searchText)
+            // https://www.hackingwithswift.com/quick-start/concurrency/how-to-make-a-task-sleep
+            Task {
+                await getDataFromAPI()
+            }
+            
+        }
     } // End body
 }
 
 // --------------------------------------- Preview
 #Preview {
-    ExploreView(viewModel: LocationViewModel())
+    ExploreView(locationViewModel: LocationViewModel())
 }

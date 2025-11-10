@@ -14,7 +14,7 @@ struct MainTabView: View {
     // --------------------------------------- Body
     var body: some View {
         TabView{
-            ExploreView(viewModel: LocationViewModel())
+            ExploreView(locationViewModel: LocationViewModel())
                 .tabItem {
                     Label("Utforsk", systemImage: "map")
                 }

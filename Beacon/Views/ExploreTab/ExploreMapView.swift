@@ -11,10 +11,12 @@ import SwiftData
 struct ExploreMapView: View {
     
     // State object
-    @ObservedObject var LocationViewModel: LocationViewModel
+    @StateObject var LocationViewModel: LocationViewModel
+    
+    // Variables
+    var places: [Places]
     
     // Bindings
-    @Binding var places: [Places]
     @Binding var location: MapCameraPosition
     @Binding var latitude: Double
     @Binding var longitude: Double
@@ -87,7 +89,7 @@ struct ExploreMapView: View {
                 .ignoresSafeArea()
                 .onAppear{
                     // Updating camera location
-                    location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
+                    location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
                 }
                 
                 HStack() {
@@ -98,7 +100,7 @@ struct ExploreMapView: View {
                         // GPS Button
                         Button {
                             updateUserLocation()
-                            location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003)))
+                            location = .region(MKCoordinateRegion.init(center: .init(latitude: latitude, longitude: longitude), span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
                         } label: {
                             Image(systemName: "location.fill")
                                 .font(.system(size: 20, weight: .bold))
