@@ -4,9 +4,9 @@
 //
 // Kandidatnr 97
 
-// ViewModel for search in ExploreView and children.
+// ViewModel for search in ExploreView.
 // Source: Combine. (2024). Tanaschita.com. https://tanaschita.com/combine-swiftui-search-query-debounce/
-// - Based on code from website.
+// Source: Saidi, D. (2025). Creating a debounced search context for performant SwiftUI searches. Danielsaidi.com. https://danielsaidi.com/blog/2025/01/08/creating-a-debounced-search-context-for-performant-swiftui-searches
 
 import Foundation
 import Combine
@@ -14,20 +14,11 @@ import Combine
 class SearchViewModel: ObservableObject {
     
     @Published var searchText = ""
-    private var searchTextCancellable = Set<AnyCancellable>()
+    @Published var debouncedText = ""
     
-//    init() {
-//        $searchText
-//            .debounce(for: .milliseconds(2000), scheduler: RunLoop.main) // 500 instead of 300 because me personally felt it did too many API calls.
-//            .sink{ [weak self] searchInput in
-//                Task {
-//                    self?.updateSearch(userSearchInput: searchText)
-//                }
-//                print("SearchInoutTest: ", searchInput)
-//            }
-//            .store(in: &searchTextCancellable)
-//    }
-//    func updateSearch(userSearchInput: String?){
-//        searchText = userSearchInput ?? ""
-//    }
+    init() {
+        $searchText
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates() // Only assigns if it is changes, and makes sure its diffrent from the previous one
+            .assign(to: &$debouncedText) // Assigning it to new variable to save the delayed text
 }

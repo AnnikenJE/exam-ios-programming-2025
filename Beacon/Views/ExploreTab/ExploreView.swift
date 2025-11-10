@@ -35,7 +35,6 @@ struct ExploreView: View {
     @State private var errorMessage: String? = nil
     @State private var isLoading = false
     @State private var translatedCategory = "Restaurant"
-    @State private var searchText = ""
     @State private var searchTextInURL = ""
     @State private var isSliding = false
     @State private var isFavourite = false
@@ -93,14 +92,15 @@ struct ExploreView: View {
     }
     
    func generateSearchInURL() {
-        if !searchText.isEmpty {
-            searchTextInURL = "&name=\(searchText)"
+       if !searchViewModel.debouncedText.isEmpty {
+            searchTextInURL = "&name=\(searchViewModel.debouncedText)"
         } else {
             searchTextInURL = ""
         }
     }
     
-    func checkIfPlaceIsFiveStarRated(){
+    // Favorite places has been rated before.
+    func checkIfPlaceIsRated(){
         
     }
 
@@ -182,14 +182,11 @@ struct ExploreView: View {
             .toolbarBackground(Color.deepBlue, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)
         } // End NavigationStack
-        .searchable(text: $searchText)
-        .onChange(of: searchText) { oldSearch , newSearch in
-            //searchViewModel.updateSearch(userSearchInput: searchText)
-            // https://www.hackingwithswift.com/quick-start/concurrency/how-to-make-a-task-sleep
-            Task {
+        .searchable(text: $searchViewModel.searchText)
+        .onChange(of: searchViewModel.debouncedText){ oldText, newText in
+            Task{
                 await getDataFromAPI()
             }
-            
         }
     } // End body
 }
