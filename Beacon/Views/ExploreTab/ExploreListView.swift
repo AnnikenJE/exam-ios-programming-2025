@@ -4,6 +4,8 @@
 //
 // Kandidatnr 97
 
+// View for explore tab. Responsibility: List.
+
 import SwiftUI
 import SwiftData
 

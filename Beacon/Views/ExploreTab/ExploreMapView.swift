@@ -4,6 +4,8 @@
 //
 // Kandidatnr 97
 
+// View for explore tab. Responsibility: Map.
+
 import SwiftUI
 import MapKit
 import SwiftData

@@ -2,6 +2,9 @@
 //  MyPlacesView.swift
 //  Beacon
 //
+// Kandidatnr 97
+
+// View for My Places (Mine Steder) Tab.
 
 import SwiftUI
 import SwiftData

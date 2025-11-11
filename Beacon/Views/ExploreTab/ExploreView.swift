@@ -4,6 +4,8 @@
 //
 // Kandidatnr 97
 
+// View for Explore (Utforsk) tab.
+
 import SwiftUI
 import MapKit
 import Foundation
@@ -113,27 +115,45 @@ struct ExploreView: View {
     func sortPlaces() {
         isSearching = true
         
-        case()
-        
-        
+        switch(selectedSorting){
+                
+            case .noSorting:
+                return
+                
+            case .alphabetical:
+                let filteredPlaces = places.map{ place in
+                    let filteredFeatures = place.features.sorted {
+                        $0.properties.name < $1.properties.name
+                    }
+                    return Places(features: filteredFeatures)
+                }
+                places = filteredPlaces
+                
+            case .highestRating:
+                
+                // TODO: Add sorting by highest rating
+               return
+                
+            case .closestDistance:
+
+                // TODO: Add sorting by closest distance
+                return
+        }
     }
     
+    // If it´s rated then its a favourite. (Even with bad rating :)
     func sortFavourites ()  {
         isSearching = true
         
-        var filtredPlaces: [Places] = []
-        
-        for place in places { // ForEach can only be used in View, so Im using For-In loop https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow/
-            let filteredFeatures = place.features.filter{ feature in
+        let sortedPlaces = places.map{ place in
+            let sortedFeatures = place.features.filter{ feature in
                 allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
             }
-
-            filtredPlaces.append(Places(features: filteredFeatures))
-            
+            return Places(features: sortedFeatures)
         }
-        places = filtredPlaces
+        places = sortedPlaces
     }
-
+    
     func clearButton() async {
         searchViewModel.debouncedText = ""
         radius = 5000

@@ -4,6 +4,8 @@
 //
 // Kandidatnr 97
 
+// App :)
+
 import SwiftUI
 
 @main

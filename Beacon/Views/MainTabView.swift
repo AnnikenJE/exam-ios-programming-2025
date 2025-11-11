@@ -4,7 +4,7 @@
 //
 // Kandidatnr 97
 
-// Tab bar
+// Tab bar.
 
 import SwiftUI
 import SwiftData

@@ -46,8 +46,6 @@ struct PlaceDetailsView: View {
             print("Place == nil in ratePlace.")
             return
         }
-        
-        // Not all of these have a purpose anymore. Please read description in SavedPlace Model.
         let placeName = place.properties.name
         let placeAddress = place.properties.addressLine
         let placeCategory = translatedCategory
