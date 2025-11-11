@@ -88,7 +88,7 @@ struct ExploreListView: View {
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
                 }
-                .padding(.top, 60)
+                .padding(.top, 100)
                 .refreshable {
                     
                     try? await Task.sleep(for: .milliseconds(500))

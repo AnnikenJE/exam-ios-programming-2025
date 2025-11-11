@@ -27,8 +27,19 @@ struct ExploreView: View {
         case hotel
     }
     
+    enum Sorting {
+        case noSorting
+        case highestRating
+        case alphabetical
+        case closestDistance
+    }
+    
+    // Querys
+    @Query private var allSavedPlaces: [SavedPlace]
+    
     // States
     @State private var category = "catering.restaurant"
+    @State private var selectedSorting: Sorting = .noSorting
     @State private var selectedCategory: Category = .restaurant
     @State private var isMapShowing = true
     @State private var places: [Places] = []
@@ -38,6 +49,8 @@ struct ExploreView: View {
     @State private var searchTextInURL = ""
     @State private var isSliding = false
     @State private var isFavourite = false
+    @State private var isSearching = false
+    
     
     // Default location on startup, Oslo Central Station 59.9111 10.750
     @State private var location: MapCameraPosition = .region(
@@ -51,7 +64,7 @@ struct ExploreView: View {
         do {
             isLoading = true
             errorMessage = nil
-            
+            isSearching = true
             getCategory()
             generateSearchInURL()
             
@@ -63,7 +76,7 @@ struct ExploreView: View {
             }
             // TODO: Slett print
             print(url)
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await URLSession.shared.data(from: url)
             let places = try JSONDecoder().decode(Places.self, from: data)
             self.places = [places]
             print("Getting data from API successfull.")
@@ -98,12 +111,20 @@ struct ExploreView: View {
             searchTextInURL = ""
         }
     }
+
     
-    // Favorite places has been rated before.
-    func checkIfPlaceIsRated(){
+    // Resets everything back to default
+    func clearButton() async {
+        searchViewModel.debouncedText = ""
+        radius = 5000
+        selectedCategory = .restaurant
+        selectedSorting = .noSorting
+        latitude = 59.9111
+        longitude = 10.7503
         
+        await getDataFromAPI()
+        isSearching = false
     }
-    
     
     // --------------------------------------- Body
     var body: some View {
@@ -131,23 +152,35 @@ struct ExploreView: View {
                             
                         })
                         .frame(width: 200)
-                        Button {
-                            isFavourite.toggle()
-                        } label: {
-                            Image(systemName: isFavourite ? "star.filled" : "star")
-                        }
-                        .buttonStyleModifier()
+                      
                         Spacer(minLength: 10)
                         // Toggle for showing map or list
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
                             .toggleStyle(.button)
                             .contentTransition(.symbolEffect)
                             .background(Color.deepBlue)
-                            .cornerRadius(18)
+                            .cornerRadius(50)
+                    }
+                    HStack{
+                        Picker("Filter", selection: $selectedSorting){
+                            Text("Ingen filter").tag(Sorting.noSorting)
+                            Text("Alfabetisk").tag(Sorting.alphabetical)
+                            Text("Vurdering").tag(Sorting.highestRating)
+                            Text("Distanse").tag(Sorting.closestDistance)
+                        }
+                        .buttonStyleModifier()
+                        Button {
+                            isFavourite.toggle()
+                        } label: {
+                            Image(systemName: isFavourite ? "star.fill" : "star.slash")
+                        }
+                        .buttonStyleModifier()
+                        Spacer()
                     }
                     Spacer()
                 }
                 .padding()
+                
             } // End ZStack
             .toolbar{
                 ToolbarItem(placement: .principal){
@@ -161,6 +194,20 @@ struct ExploreView: View {
                     .background(Color.beaconOrange)
                     .presentationCornerRadius(18)
                     .cornerRadius(18)
+                }
+                
+                ToolbarItem(placement: .cancellationAction){
+                    if isSearching {
+                        Button {
+                            Task{
+                                await clearButton()
+                            }
+                        } label: {
+                            Image(systemName: "xmark")
+                                .buttonStyleModifier()
+                        }
+                        .buttonStyleModifier()
+                    }
                 }
                 
                 ToolbarItem(placement: .confirmationAction){
