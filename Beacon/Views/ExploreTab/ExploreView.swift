@@ -159,6 +159,7 @@ struct ExploreView: View {
         radius = 5000
         selectedCategory = .restaurant
         selectedSorting = .noSorting
+        isFavouritesSorted = false
         isSearching = false
     }
     
@@ -207,6 +208,7 @@ struct ExploreView: View {
                         
                         Button {
                             isFavouritesSorted.toggle()
+                            isSearching = true
                         } label: {
                             Image(systemName: isFavouritesSorted ? "star.fill" : "star.slash")
                         }
