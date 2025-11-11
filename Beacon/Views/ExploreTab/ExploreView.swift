@@ -48,7 +48,7 @@ struct ExploreView: View {
     @State private var isMapShowing = true
     @State private var isLoading = false
     @State private var isSliding = false
-    @State private var isFavourite = false
+    @State private var isFavouritesSorted = false
     @State private var isSearching = false
     // Default location on startup, Oslo Central Station 59.9111 10.750
     @State private var location: MapCameraPosition = .region(
@@ -62,7 +62,7 @@ struct ExploreView: View {
         do {
             isLoading = true
             errorMessage = nil
-            isSearching = true
+            
             getCategory()
             generateSearchInURL()
             
@@ -73,6 +73,11 @@ struct ExploreView: View {
             let (data, _) = try await URLSession.shared.data(from: url)
             let places = try JSONDecoder().decode(Places.self, from: data)
             self.places = [places]
+            
+            sortPlaces()
+            if isFavouritesSorted{
+                sortFavourites()
+            }
             
             isLoading = false
         } catch {
@@ -93,6 +98,7 @@ struct ExploreView: View {
             category = "catering.restaurant"
             translatedCategory = "Restaurant"
         }
+        isSearching = true
     }
     
     func generateSearchInURL() {
@@ -101,18 +107,38 @@ struct ExploreView: View {
         } else {
             searchTextInURL = ""
         }
+        isSearching = true
+    }
+    
+    func sortPlaces() {
+        isSearching = true
+        
+        case()
+        
+        
+    }
+    
+    func sortFavourites ()  {
+        isSearching = true
+        
+        var filtredPlaces: [Places] = []
+        
+        for place in places { // ForEach can only be used in View, so Im using For-In loop https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow/
+            let filteredFeatures = place.features.filter{ feature in
+                allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
+            }
+
+            filtredPlaces.append(Places(features: filteredFeatures))
+            
+        }
+        places = filtredPlaces
     }
 
-    // Resets everything back to default
     func clearButton() async {
         searchViewModel.debouncedText = ""
         radius = 5000
         selectedCategory = .restaurant
         selectedSorting = .noSorting
-        latitude = 59.9111
-        longitude = 10.7503
-        
-        await getDataFromAPI()
         isSearching = false
     }
     
@@ -136,12 +162,13 @@ struct ExploreView: View {
                                in: 1000...10000,
                                onEditingChanged: { sliding in
                             isSliding = sliding
+                            isSearching = true
                             
                         })
                         .frame(width: 200)
-                      
+                        
                         Spacer(minLength: 10)
-
+                        
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
                             .toggleStyle(.button)
                             .contentTransition(.symbolEffect)
@@ -159,9 +186,9 @@ struct ExploreView: View {
                         .buttonStyleModifier()
                         
                         Button {
-                            isFavourite.toggle()
+                            isFavouritesSorted.toggle()
                         } label: {
-                            Image(systemName: isFavourite ? "star.fill" : "star.slash")
+                            Image(systemName: isFavouritesSorted ? "star.fill" : "star.slash")
                         }
                         .buttonStyleModifier()
                         Spacer()
