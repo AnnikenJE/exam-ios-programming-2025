@@ -6,8 +6,6 @@
 import SwiftUI
 import SwiftData
 
-//TODO: Legge til delete + PlaceDetailsView
-
 struct MyPlacesView: View {
     
     // Querys
@@ -18,18 +16,20 @@ struct MyPlacesView: View {
     
     // --------------------------------------- Body
     var body: some View {
-        NavigationStack{
-            ScrollView{
+        NavigationStack {
+            ScrollView {
                 Section {
                     ForEach(allSavedPlaces) { place in
                         HStack{
                             Spacer()
+                            
                             Text(place.name)
                                 .font(.headline.bold())
                                 .padding()
                             
                             AverageStarRatingView(stars: place.ratings.map { $0.stars})
                                 .padding()
+                            
                             Spacer()
                         }
                         Section {
@@ -42,24 +42,25 @@ struct MyPlacesView: View {
                                     Image(systemName: "star.fill")
                                         .foregroundStyle(Color.beaconOrange)
                                     Spacer()
-                                }
+                                } // End HStack
                                 .padding(10)
                                 .background(Color.accentColor.opacity(0.3))
                                 .frame(maxWidth: 300)
                                 .cornerRadius(18)
-                           }
-                        }
-                    }
-                }
-            }
+                                
+                           } // End ForEach
+                        } // End Section
+                    } // End ForEach
+                } // End Section
+            } // End ScrollView
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar{
+            .toolbar {
                 ToolbarItem(placement: .title) {
                     Text("Mine Steder")
                         .font(.largeTitle.bold())
                         .foregroundStyle(Color.beaconOrange)
                 }
-            }
-        }
-    }
+            } // End Toolbar
+        } // End NavigationStack
+    } // End Body
 }

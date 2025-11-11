@@ -4,7 +4,7 @@
 //
 //  Kandidatnummer 97
 
-// Animation for places: Resturant
+// Animation for places: Resturant.
 
 import SwiftUI
 

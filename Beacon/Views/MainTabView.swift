@@ -22,10 +22,10 @@ struct MainTabView: View {
                 .tabItem{
                     Label("Mine steder", systemImage: "pin")
                 }
-        }
+        } // End TabView
         .modelContainer(for: [SavedPlace.self, Rating.self])
         .tint(Color.beaconOrange)
-    }
+    } // End Body
 }
 
 // --------------------------------------- Preview

@@ -4,7 +4,7 @@
 //
 // Kandidatnr 97
 
-// Default button styling
+// Default button styling.
 
 import SwiftUI
 

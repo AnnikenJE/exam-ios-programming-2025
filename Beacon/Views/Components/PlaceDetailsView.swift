@@ -4,12 +4,10 @@
 //
 // Kandidatnr 97
 
-// View for showing places details
+// View for showing places details.
 
 import SwiftUI
 import SwiftData
-
-// TODO: Lage star ratingRatingView og singleStarRatingView + openInAppleMaps
 
 struct PlaceDetailsView: View {
     
@@ -33,11 +31,11 @@ struct PlaceDetailsView: View {
     @State private var starRating = 1
     @State private var ratingsToInt: [Int] = []
     
-    
     // Functions
     func openAppleMaps(){
-        guard let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Kunne ikke vise adresse")")
+        guard let url = URL(string: "https://maps.apple.com/?q=\(place?.properties.addressLine ?? "Could not find address in apple maps.")")
         else {
+            print("Could not create url for apple maps.")
             return
         }
         openURL(url)
@@ -49,8 +47,7 @@ struct PlaceDetailsView: View {
             return
         }
         
-        // TODO: ENGELSK ELLER FJERN
-        // Unødvendig mye kode - konsekvens av det som står i SavedPlace
+        // Not all of these have a purpose anymore. Please read description in SavedPlace Model.
         let placeName = place.properties.name
         let placeAddress = place.properties.addressLine
         let placeCategory = translatedCategory
@@ -85,13 +82,10 @@ struct PlaceDetailsView: View {
     }
     
     func findPlaceInDatabase() {
-        
         let matchingPlace = allSavedPlaces.first{ saved in
             saved.name == place?.properties.name
         }
-        
         ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
-        
     }
     
     // --------------------------------------- Body
@@ -127,26 +121,27 @@ struct PlaceDetailsView: View {
                             Text("Adresse")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text(place?.properties.addressLine ?? "Kunne ikke vise adresse")
+                            Text(place?.properties.addressLine ?? "Ingen adresse.")
                         }
                         
                         HStack{
                             Text("Telefonnummer")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text(place?.properties.contact?.phone ?? "Kunne ikke vise telefonnummer.")
+                            Text(place?.properties.contact?.phone ?? "Ingen telefonnummer.")
                         }
                         
                         HStack{
                             Text("Åpningstider")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text(place?.properties.openingHours ?? "Kunne ikke vise åpningstider")
+                            Text(place?.properties.openingHours ?? "Ingen åpningstider.")
                         }
                         
                         HStack{
                             Text("Nettside")
                                 .foregroundStyle(Color(.gray))
+                            
                             Spacer()
                             
                             if let website = place?.properties.website{
@@ -254,7 +249,7 @@ struct PlaceDetailsView: View {
             // Toolbar
             .toolbar{
                 ToolbarItem(placement: .largeTitle) {
-                    Text(place?.properties.name ?? "Kunne ikke vise navn")
+                    Text(place?.properties.name ?? "Kunne ikke vise navn.")
                         .font(.largeTitle.bold())
                         .foregroundStyle(Color.beaconOrange)
                         .padding()

@@ -4,7 +4,7 @@
 //
 // Kandidatnr 97
 
-// View for average star rating
+// View for average star rating.
 
 import SwiftUI
 
@@ -28,10 +28,11 @@ struct AverageStarRatingView: View {
     
     // --------------------------------------- Body
     var body: some View {
-        HStack{
+        
+        HStack {
             Text(String(format: "%.0f", averageRating))
+            
             ZStack(alignment: .leading){
-                
                 Image(systemName: "star")
                     .resizable()
                     .foregroundStyle(Color.highlightOrange)
@@ -53,16 +54,16 @@ struct AverageStarRatingView: View {
                         .resizable()
                         .foregroundStyle(Color.highlightOrange))
 
-            }
+            } // End ZStack
             .frame(width: 20, height: 20)
-        }
+        } // End HStack
             .onAppear{
                 calculateAverage()
             }
             .onChange(of: stars) { newRating, OldRating in
                 calculateAverage()
             }
-        }
+        } // End Body
 }
 
 // --------------------------------------- Preview

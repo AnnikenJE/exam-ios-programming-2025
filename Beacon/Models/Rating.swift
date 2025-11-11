@@ -4,7 +4,7 @@
 //
 // Kandidatnr 97
 
-// Model for saving places to database
+// Model for saving places to database.
 
 import SwiftData
 import Foundation

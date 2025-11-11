@@ -4,7 +4,7 @@
 //
 //  Kandidatnummer 97
 
-// Animation for places: Hotel
+// Animation for places: Hotel.
 
 import SwiftUI
 

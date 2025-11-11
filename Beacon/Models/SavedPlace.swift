@@ -6,10 +6,7 @@
 
 // Model for saving places rating
 
-// TODO: ENGELSK ELLER FJERN
-// Forklaring av ubrukt data:
-// - Jeg prøvde å koble sammen MyPlacesView med PlaceDetailsView. Problemet med dette var at SavedPlace og Places(som ble brukt som typen Feature) var forskjellige typer som ga meg problemer med å sende inn data i PlacesDetaisView fra MyPlacesView.
-// - Løsningen min som ikke ble fullført var å lage en enum som valgte hvilken type som ble sendt inn. Prøvde også å unngå å sende inn objekter og bare sende inn verdier som feks navn og adresse men det ble utrolig mye kode som ble rotete.
+// There is a lot of unessecary properties in the model. I tried connecting MyPlacesView with PlaceDetailsview but ran into some problems and was not able to finish it.
 
 import SwiftData
 import Foundation

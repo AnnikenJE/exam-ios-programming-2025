@@ -4,7 +4,7 @@
 //
 // Kandidatnr 97
 
-// Model for API calls to Geoapify Places
+// Model for API calls to Geoapify Places.
 
 // Places
 struct Places: Decodable, Hashable {

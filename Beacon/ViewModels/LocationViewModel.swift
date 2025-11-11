@@ -4,7 +4,7 @@
 //
 // Kandidatnr 97
 
-// Viewmodel for tracking user location
+// Viewmodel for tracking user location.
 
 import SwiftUI
 import Foundation
@@ -16,7 +16,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     // Published
     @Published var location: CLLocation?
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
-    @Published var locationString = "Ingen lokasjon..."
+    @Published var locationString = "No location... :("
     
     // Variables
     private let locationManager = CLLocationManager()
@@ -33,7 +33,6 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    // Functions that automaticly is called by the app
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
         if let location = locations.last {

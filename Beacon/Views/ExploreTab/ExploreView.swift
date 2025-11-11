@@ -38,20 +38,18 @@ struct ExploreView: View {
     @Query private var allSavedPlaces: [SavedPlace]
     
     // States
+    @State private var places: [Places] = []
     @State private var category = "catering.restaurant"
+    @State private var translatedCategory = "Restaurant"
+    @State private var searchTextInURL = ""
+    @State private var errorMessage: String? = nil
     @State private var selectedSorting: Sorting = .noSorting
     @State private var selectedCategory: Category = .restaurant
     @State private var isMapShowing = true
-    @State private var places: [Places] = []
-    @State private var errorMessage: String? = nil
     @State private var isLoading = false
-    @State private var translatedCategory = "Restaurant"
-    @State private var searchTextInURL = ""
     @State private var isSliding = false
     @State private var isFavourite = false
     @State private var isSearching = false
-    
-    
     // Default location on startup, Oslo Central Station 59.9111 10.750
     @State private var location: MapCameraPosition = .region(
         MKCoordinateRegion(center:
@@ -68,26 +66,19 @@ struct ExploreView: View {
             getCategory()
             generateSearchInURL()
             
-            let APIkey = APIKey.geoapifyAPIKey
-            
-            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))\(searchTextInURL)&limit=10&apiKey=\(APIkey)") else {
-                print("Invalid URL in getDataFromAPI().")
+            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))\(searchTextInURL)&limit=10&apiKey=\(APIKey.geoapifyAPIKey)") else { print("Invalid URL in getDataFromAPI().")
                 return
             }
-            // TODO: Slett print
             print(url)
             let (data, _) = try await URLSession.shared.data(from: url)
             let places = try JSONDecoder().decode(Places.self, from: data)
             self.places = [places]
-            print("Getting data from API successfull.")
             
-            //TODO: REMOVE
-            print(latitude, longitude)
             isLoading = false
         } catch {
             isLoading = false
             errorMessage = "Something went wrong in getDataFromAPI(). \(error.localizedDescription)"
-            print(errorMessage ?? "Noe gikk galt i getDataFromAPI().")
+            print(errorMessage ?? "No error message.")
         }
     }
     
@@ -112,7 +103,6 @@ struct ExploreView: View {
         }
     }
 
-    
     // Resets everything back to default
     func clearButton() async {
         searchViewModel.debouncedText = ""
@@ -130,16 +120,13 @@ struct ExploreView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                if(isLoading){
+                if(isLoading) {
                     ProgressView("Henter steder...")
                 } else {
                     if(isMapShowing) {
                         ExploreMapView(LocationViewModel: locationViewModel, places: places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
-                        
-                        ExploreListView(places: places, getDataFromAPI: getDataFromAPI, translatedCategory: $translatedCategory)
-                        
+                        ExploreListView(places: places, translatedCategory: $translatedCategory, getDataFromAPI: getDataFromAPI)
                     }
                 }
                 
@@ -154,21 +141,23 @@ struct ExploreView: View {
                         .frame(width: 200)
                       
                         Spacer(minLength: 10)
-                        // Toggle for showing map or list
+
                         Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
                             .toggleStyle(.button)
                             .contentTransition(.symbolEffect)
                             .background(Color.deepBlue)
                             .cornerRadius(50)
-                    }
-                    HStack{
-                        Picker("Filter", selection: $selectedSorting){
+                    } // End HStack
+                    
+                    HStack {
+                        Picker("Filter", selection: $selectedSorting) {
                             Text("Ingen filter").tag(Sorting.noSorting)
                             Text("Alfabetisk").tag(Sorting.alphabetical)
                             Text("Vurdering").tag(Sorting.highestRating)
                             Text("Distanse").tag(Sorting.closestDistance)
                         }
                         .buttonStyleModifier()
+                        
                         Button {
                             isFavourite.toggle()
                         } label: {
@@ -176,14 +165,16 @@ struct ExploreView: View {
                         }
                         .buttonStyleModifier()
                         Spacer()
-                    }
+                    } // End HStack
+                    
                     Spacer()
-                }
+                    
+                } // End VStack
                 .padding()
                 
             } // End ZStack
-            .toolbar{
-                ToolbarItem(placement: .principal){
+            .toolbar {
+                ToolbarItem(placement: .principal) {
                     // Picker for categories
                     Picker("Kategori", selection: $selectedCategory){
                         Text("Resturant").tag(Category.restaurant)
@@ -196,7 +187,7 @@ struct ExploreView: View {
                     .cornerRadius(18)
                 }
                 
-                ToolbarItem(placement: .cancellationAction){
+                ToolbarItem(placement: .cancellationAction) {
                     if isSearching {
                         Button {
                             Task{
@@ -210,7 +201,7 @@ struct ExploreView: View {
                     }
                 }
                 
-                ToolbarItem(placement: .confirmationAction){
+                ToolbarItem(placement: .confirmationAction) {
                     // Get places nearby button.
                     Button {
                         Task {
@@ -223,7 +214,7 @@ struct ExploreView: View {
                     .buttonStyleModifier()
                 }
                 
-                ToolbarItem(placement: .largeTitle){
+                ToolbarItem(placement: .largeTitle) {
                     HStack{
                         Image("icon2")
                             .resizable()
@@ -233,7 +224,7 @@ struct ExploreView: View {
                             .foregroundStyle(Color.beaconOrange)
                     }
                 }
-            }
+            } // End Toolbar
             .toolbarBackground(Color.deepBlue, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)
         } // End NavigationStack

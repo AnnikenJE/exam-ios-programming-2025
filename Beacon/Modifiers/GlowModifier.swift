@@ -4,4 +4,5 @@
 //
 // Kandidatnr 97
 
-// Glow til stjerner osv
+// Glow effect.
+

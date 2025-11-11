@@ -12,9 +12,6 @@ struct ExploreListView: View {
     // Variables
     var places: [Places]
     
-    // Functions from parent
-    var getDataFromAPI: () async -> Void
-    
     // Bindings
     @Binding var translatedCategory: String
     
@@ -25,16 +22,17 @@ struct ExploreListView: View {
     // Querys
     @Query private var allSavedPlaces: [SavedPlace]
     
+    // Functions from parent
+    var getDataFromAPI: () async -> Void
+    
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
-            
             if (places.isEmpty){
                 Text("Ingen steder funnet.")
             } else {
                 List(places, id: \.self){ place in
                     ForEach(place.features, id: \.self) { feature in
-                        
                         let matchingPlace = allSavedPlaces.first{ saved in
                             saved.name == feature.properties.name
                         }
@@ -80,18 +78,16 @@ struct ExploreListView: View {
                                         }
                                     }
                                 }
-                            }
-                        }
+                            } // End VStack
+                        } // End Button Label
                     } // End ForEach
-                }   // End List
-                
+                }  // End List
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
                 }
                 .padding(.top, 100)
                 .refreshable {
-                    
-                    try? await Task.sleep(for: .milliseconds(500))
+                    try? await Task.sleep(for: .milliseconds(500)) // Without sleep getDataFromApi will get cancelled.
                     Task{
                         await getDataFromAPI()
                     }

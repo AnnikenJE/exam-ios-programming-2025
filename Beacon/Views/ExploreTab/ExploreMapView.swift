@@ -26,45 +26,40 @@ struct ExploreMapView: View {
     @State private var selectedPlace: Feature? = nil
     @State private var isSheetPresented = false
     
+    // Querys
+    @Query private var allSavedPlaces: [SavedPlace]
+    
     // Functions
     func updateUserLocation() {
         LocationViewModel.requestLocation()
-        print(LocationViewModel.authorizationStatus)
-        print(LocationViewModel.locationString)
-        
         if let userlocation = LocationViewModel.location?.coordinate {
             latitude = userlocation.latitude
             longitude = userlocation.longitude
         }
+        print(LocationViewModel.locationString)
     }
-    
-    // Querys
-    @Query private var allSavedPlaces: [SavedPlace]
-    
+        
     // --------------------------------------- Body
     var body: some View {
         NavigationStack{
             ZStack {
                 Map(position: $location){
-                    
                     ForEach(places, id: \.self) { place in
                         ForEach(place.features, id: \.self) { place in
-                            
                             let matchingPlace = allSavedPlaces.first{ saved in
                                 saved.name == place.properties.name
                             }
                             
                             let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
                             
-                            
                             Annotation(place.properties.name, coordinate: CLLocationCoordinate2D(latitude: place.properties.lat, longitude: place.properties.lon)){
-                                
                                 VStack {
                                     if !ratingsToInt.isEmpty{
                                             AverageStarRatingView(stars: ratingsToInt)
                                                 .offset(x: 0, y: 15)
                                     }
                                 }
+                                
                                 Button {
                                     selectedPlace = place
                                     isSheetPresented = true
@@ -73,11 +68,10 @@ struct ExploreMapView: View {
                                         .resizable()
                                         .frame(width: 60, height: 60)
                                 }
-                            }
-                        }
-                    }
+                            } // End Annotation
+                        } // End ForEach
+                    } // End ForEach
                 } // End Map
-                //TODO: FORKLARE + KILDE
                 .onMapCameraChange { location in
                     latitude = location.region.center.latitude
                     longitude = location.region.center.longitude
@@ -94,7 +88,7 @@ struct ExploreMapView: View {
                 
                 HStack() {
                     Spacer()
-                    VStack{
+                    VStack {
                         Spacer()
                         
                         // GPS Button
@@ -107,10 +101,10 @@ struct ExploreMapView: View {
                         } // End Button label
                         .buttonStyleModifier()
                         .padding()
-                    }
-                }
-            }
-        }// End NavigationStack
-    }
+                    } // End VStack
+                } // End HStack
+            } // End ZStack
+        } // End NavigationStack
+    } // End Body
 }
 
