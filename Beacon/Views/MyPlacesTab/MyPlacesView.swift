@@ -21,20 +21,19 @@ struct MyPlacesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                // Section for places
                 Section {
                     ForEach(allSavedPlaces) { place in
                         HStack{
                             Spacer()
-                            
                             Text(place.name)
                                 .font(.headline.bold())
                                 .padding()
-                            
                             AverageStarRatingView(stars: place.ratings.map { $0.stars})
                                 .padding()
-                            
                             Spacer()
                         }
+                        // Section for ratings
                         Section {
                             ForEach(place.ratings){ rating in
                                 HStack(){

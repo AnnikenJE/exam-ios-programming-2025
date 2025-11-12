@@ -59,7 +59,6 @@ struct ExploreView: View {
                            span:
                             MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
     
-    
     // Computed variables
     var sortedAndFilteredPlaces : [Places] {
         
@@ -80,7 +79,8 @@ struct ExploreView: View {
         // Switch for sorting picker
         switch(selectedSorting){
             case .closestDistance:
-                return result // Default.
+                // Default.
+                return result
                 
             case .alphabetical:
                 let sortedPlaces = places.map { place in
@@ -93,13 +93,12 @@ struct ExploreView: View {
                 
             case .highestRating:
                 
+                // TODO: FIX HIGHEST RATING SORTING
+        
                 return result
             }
-        
-        
         return result
     }
-    
     
     // Functions
     func getDataFromAPI() async {
@@ -120,7 +119,6 @@ struct ExploreView: View {
             self.places = [places]
             
             checkIsFeaturesIsEmpty()
-
             isLoading = false
         } catch {
             isLoading = false
@@ -206,7 +204,7 @@ struct ExploreView: View {
                                     Image(systemName: isFavouritesSorted ? "star.fill" : "star.slash")
                                 }
                                 .buttonStyleModifier()
-                            } // ENd HStack
+                            } // End HStack
                             
                             Slider(value: $radius,
                                    in: 1000...10000,
@@ -237,15 +235,11 @@ struct ExploreView: View {
                                 .contentTransition(.symbolEffect)
                                 .background(Color.deepBlue)
                                 .cornerRadius(50)
-                            
                         } //End VStack
                     } // End HStack
-                    
                     Spacer()
-                    
                 } // End VStack
                 .padding()
-                
             } // End ZStack
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -273,7 +267,7 @@ struct ExploreView: View {
                         }
                         .buttonStyleModifier()
                     }
-                }
+                } // End ToolbarItem
                 
                 ToolbarItem(placement: .confirmationAction) {
                     // Get places nearby button.
@@ -284,9 +278,9 @@ struct ExploreView: View {
                     } label: {
                         Image(systemName: "arrow.clockwise")
                             .buttonStyleModifier()
-                    } // End Button label
+                    }
                     .buttonStyleModifier()
-                }
+                } // End ToolbarItem
                 
                 ToolbarItem(placement: .largeTitle) {
                     HStack{
@@ -296,7 +290,7 @@ struct ExploreView: View {
                         Text("Beacon")
                             .headingStyleModifier()
                     }
-                }
+                } // End ToolbarItem
             } // End Toolbar
             .toolbarBackground(Color.deepBlue, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)

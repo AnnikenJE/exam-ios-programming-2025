@@ -46,6 +46,7 @@ struct PlaceDetailsView: View {
             print("Place == nil in ratePlace.")
             return
         }
+        
         let placeName = place.properties.name
         let placeAddress = place.properties.addressLine
         let placeCategory = translatedCategory
@@ -55,7 +56,6 @@ struct PlaceDetailsView: View {
         let placeWebsite = place.properties.website
         let placeLon = place.properties.lon
         let placeLat = place.properties.lat
-        
         let existingPlace = allSavedPlaces.first(where: { saved in
             saved.name == placeName && saved.address == placeAddress})
         
@@ -91,9 +91,9 @@ struct PlaceDetailsView: View {
         NavigationStack {
             VStack {
                 Form {
-                    // Section
+                    // Information section
                     Section("Informasjon"){
-                        HStack{
+                        HStack {
                             Text("Vurdering")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
@@ -105,45 +105,42 @@ struct PlaceDetailsView: View {
                             } else{
                                 Text("Ingen vurderinger.")
                             }
-                        }
+                        } // End HStack
                         
-                        HStack{
+                        HStack {
                             Text("Kategori")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text(translatedCategory)
-
-                        }
+                        } // End HStack
                         
-                        HStack{
+                        HStack {
                             Text("Adresse")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text(place?.properties.addressLine ?? "Ingen adresse.")
-                        }
+                        } // End HStack
                         
-                        HStack{
+                        HStack {
                             Text("Telefonnummer")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text(place?.properties.contact?.phone ?? "Ingen telefonnummer.")
-                        }
+                        } // End HStack
                         
-                        HStack{
+                        HStack {
                             Text("Åpningstider")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text(place?.properties.openingHours ?? "Ingen åpningstider.")
-                        }
+                        } // End HStack
                         
-                        HStack{
+                        HStack {
                             Text("Nettside")
                                 .foregroundStyle(Color(.gray))
-                            
                             Spacer()
                             
                             if let website = place?.properties.website{
-                                
                                 if let url = URL(string: website){
                                     Link(website, destination: url)
                                 } else {
@@ -152,16 +149,16 @@ struct PlaceDetailsView: View {
                             } else {
                                 Text("Ingen nettside.")
                             }
-                        }
+                        } // End HStack
                         
-                        HStack{
+                        HStack {
                             Text("Koordinater")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             Text("latitude \(place?.properties.lat ?? 0.0), \nlongitude \(place?.properties.lon ?? 0.0)")
-                        }
+                        } // End HStack
                         
-                        Button{
+                        Button {
                             openAppleMaps()
                         } label: {
                             Text("Åpne i Maps")
@@ -172,9 +169,9 @@ struct PlaceDetailsView: View {
                     } // End Section
                 } // End Form
                 
-                // Section
+                // Rating Section
                 Section("Vurder"){
-                    VStack{
+                    VStack {
                         HStack(spacing: 15){
                             Button {
                                 twoStarReview = false
@@ -240,16 +237,16 @@ struct PlaceDetailsView: View {
                             }
                             .buttonStyleModifier()
                         } // End HStack with stars
-                    }
+                    } // End VStack
                     .padding()
                 } // End Section
-            }
+            } // End VStack
             // Toolbar
             .toolbar{
                 ToolbarItem(placement: .largeTitle) {
                     Text(place?.properties.name ?? "Kunne ikke vise navn.")
                         .headingStyleModifier()
-                }
+                } // End ToolbarItem
                 
                 ToolbarItem(placement: .principal){
                     switch(translatedCategory){
@@ -262,7 +259,7 @@ struct PlaceDetailsView: View {
                         default:
                             CafeAnimationView()
                     }
-                }
+                } // End ToolbarItem
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button{
@@ -272,7 +269,7 @@ struct PlaceDetailsView: View {
                             .foregroundStyle(Color.white)
                     }
                     .buttonStyleModifier()
-                }
+                } // End ToolbarItem
             } // End .toolbar
         } // End navigationStack
         .onAppear{

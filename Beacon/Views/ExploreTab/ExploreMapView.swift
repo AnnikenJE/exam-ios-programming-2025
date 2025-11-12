@@ -43,25 +43,23 @@ struct ExploreMapView: View {
         
     // --------------------------------------- Body
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ZStack {
-                Map(position: $location){
+                Map(position: $location) {
                     ForEach(places, id: \.self) { place in
                         ForEach(place.features, id: \.self) { place in
                             let matchingPlace = allSavedPlaces.first{ saved in
                                 saved.name == place.properties.name
                             }
-                            
                             let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
                             
-                            Annotation(place.properties.name, coordinate: CLLocationCoordinate2D(latitude: place.properties.lat, longitude: place.properties.lon)){
+                            Annotation(place.properties.name, coordinate: CLLocationCoordinate2D(latitude: place.properties.lat, longitude: place.properties.lon)) {
                                 VStack {
                                     if !ratingsToInt.isEmpty{
                                             AverageStarRatingView(stars: ratingsToInt)
                                                 .offset(x: 0, y: 15)
                                     }
-                                }
-                                
+                                } // End VStack
                                 Button {
                                     selectedPlace = place
                                     isSheetPresented = true
@@ -80,7 +78,6 @@ struct ExploreMapView: View {
                 }
                 .sheet(isPresented: $isSheetPresented){
                     PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
-                    
                 }
                 .ignoresSafeArea()
                 .onAppear{
@@ -92,7 +89,6 @@ struct ExploreMapView: View {
                     Spacer()
                     VStack {
                         Spacer()
-                        
                         // GPS Button
                         Button {
                             updateUserLocation()

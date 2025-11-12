@@ -39,33 +39,34 @@ struct ExploreListView: View {
                     
                     let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
                     
-                    Button{
+                    Button {
                         selectedPlace = feature
                         isSheetPresented = true
                     } label: {
-                        VStack{
-                            HStack{
+                        VStack {
+                            HStack {
                                 Text("Navn")
                                     .foregroundStyle(Color.gray)
                                 Spacer()
                                 Text(feature.properties.name)
                                     .font(.headline)
                                     .multilineTextAlignment(.trailing)
-                            }
+                            } // End HStack
                             
-                            HStack{
+                            HStack {
                                 Text("Adresse")
                                     .foregroundStyle(Color.gray)
                                 Spacer()
                                 Text(feature.properties.addressLine)
                                     .font(.subheadline)
                                     .multilineTextAlignment(.trailing)
-                            }
-                            HStack{
+                            } // End HStack
+                            
+                            HStack {
                                 Text("Rating")
                                     .foregroundStyle(Color.gray)
                                 Spacer()
-                                VStack{
+                                VStack {
                                     if !ratingsToInt.isEmpty{
                                         AverageStarRatingView(stars: ratingsToInt)
                                             .offset(x: 0, y: 15)
@@ -77,7 +78,7 @@ struct ExploreListView: View {
                                             .foregroundStyle(Color.gray)
                                     }
                                 }
-                            }
+                            } // End HStack
                         } // End VStack
                     } // End Button Label
                 } // End ForEach

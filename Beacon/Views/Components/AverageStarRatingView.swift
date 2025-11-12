@@ -19,7 +19,6 @@ struct AverageStarRatingView: View {
     // Functions
     func calculateAverage(){
         var sum = 0
-        
         for star in stars {
             sum += star
         }
@@ -32,7 +31,7 @@ struct AverageStarRatingView: View {
         HStack {
             Text(String(format: "%.0f", averageRating))
             
-            ZStack(alignment: .leading){
+            ZStack(alignment: .leading) {
                 Image(systemName: "star")
                     .resizable()
                     .foregroundStyle(Color.highlightOrange)
@@ -53,7 +52,6 @@ struct AverageStarRatingView: View {
                     Image(systemName: "star.fill")
                         .resizable()
                         .foregroundStyle(Color.highlightOrange))
-
             } // End ZStack
             .frame(width: 20, height: 20)
         } // End HStack
