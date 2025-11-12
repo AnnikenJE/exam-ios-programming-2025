@@ -14,7 +14,7 @@ struct CafeAnimationView: View {
     @State private var opacity1 = 1.0
     @State private var opacity2 = 1.0
     @State private var opacity3 = 1.0
-    
+
     @State private var offsetY1: CGFloat = -35
     @State private var offsetY2: CGFloat = -35
     @State private var offsetY3: CGFloat = -35
