@@ -23,17 +23,17 @@ struct ExploreView: View {
     @AppStorage("radius") private var radius = 5000.0
     
     // Enum
-    enum Category {
+    enum Category: String, CaseIterable {
         case restaurant
         case cafe
         case hotel
     }
     
-    enum Sorting {
-        case noSorting
-        case highestRating
-        case alphabetical
-        case closestDistance
+    enum Sorting: String, CaseIterable {
+        case noSorting = "Ingen sortering"
+        case highestRating = "Rangering"
+        case alphabetical = "Alfabetisk"
+        case closestDistance = "Disttanse"
     }
     
     // Querys
@@ -77,6 +77,7 @@ struct ExploreView: View {
             self.places = [places]
             
             sortPlaces()
+
             if isFavouritesSorted{
                 sortFavourites()
             }
@@ -112,6 +113,8 @@ struct ExploreView: View {
         isSearching = true
     }
     
+    
+
     func sortPlaces() {
         isSearching = true
         
@@ -199,10 +202,10 @@ struct ExploreView: View {
                     
                     HStack {
                         Picker("Filter", selection: $selectedSorting) {
-                            Text("Ingen filter").tag(Sorting.noSorting)
-                            Text("Alfabetisk").tag(Sorting.alphabetical)
-                            Text("Vurdering").tag(Sorting.highestRating)
-                            Text("Distanse").tag(Sorting.closestDistance)
+                            ForEach(Sorting.allCases, id: \.self){ option in
+                                Text(option.rawValue).tag(option)
+                            }
+
                         }
                         .buttonStyleModifier()
                         
@@ -269,8 +272,7 @@ struct ExploreView: View {
                             .resizable()
                             .frame(width: 55, height: 55)
                         Text("Beacon")
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(Color.beaconOrange)
+                            .headingStyleModifier()
                     }
                 }
             } // End Toolbar

@@ -60,8 +60,7 @@ struct MyPlacesView: View {
             .toolbar {
                 ToolbarItem(placement: .title) {
                     Text("Mine Steder")
-                        .font(.largeTitle.bold())
-                        .foregroundStyle(Color.beaconOrange)
+                        .headingStyleModifier()
                 }
             } // End Toolbar
         } // End NavigationStack

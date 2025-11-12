@@ -17,7 +17,7 @@ struct PlaceDetailsView: View {
     @Environment(\.modelContext) private var modelContext
     
     // Bindings
-    @Binding var place: Feature? 
+    @Binding var place: Feature?  
     @Binding var translatedCategory: String
  
     // Querys
@@ -248,9 +248,7 @@ struct PlaceDetailsView: View {
             .toolbar{
                 ToolbarItem(placement: .largeTitle) {
                     Text(place?.properties.name ?? "Kunne ikke vise navn.")
-                        .font(.largeTitle.bold())
-                        .foregroundStyle(Color.beaconOrange)
-                        .padding()
+                        .headingStyleModifier()
                 }
                 
                 ToolbarItem(placement: .principal){
