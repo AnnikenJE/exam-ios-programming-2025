@@ -30,10 +30,9 @@ struct ExploreView: View {
     }
     
     enum Sorting: String, CaseIterable {
-        case noSorting = "Ingen sortering"
+        case closestDistance = "Distanse"
         case highestRating = "Rangering"
         case alphabetical = "Alfabetisk"
-        case closestDistance = "Disttanse"
     }
     
     // Querys
@@ -45,10 +44,11 @@ struct ExploreView: View {
     @State private var translatedCategory = "Restaurant"
     @State private var searchTextInURL = ""
     @State private var errorMessage: String? = nil
-    @State private var selectedSorting: Sorting = .noSorting
+    @State private var selectedSorting: Sorting = .closestDistance
     @State private var selectedCategory: Category = .restaurant
     @State private var isMapShowing = true
     @State private var isLoading = false
+    @State private var isFeaturesEmpty = true
     @State private var isSliding = false
     @State private var isFavouritesSorted = false
     @State private var isSearching = false
@@ -68,7 +68,7 @@ struct ExploreView: View {
             getCategory()
             generateSearchInURL()
             
-            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))\(searchTextInURL)&limit=10&apiKey=\(APIKey.geoapifyAPIKey)") else { print("Invalid URL in getDataFromAPI().")
+            guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))\(searchTextInURL)&bias=proximity:\(longitude),\(latitude)&limit=10&apiKey=\(APIKey.geoapifyAPIKey)") else { print("Invalid URL in getDataFromAPI().")
                 return
             }
             print(url)
@@ -80,6 +80,7 @@ struct ExploreView: View {
             if isFavouritesSorted{
                 sortFavourites()
             }
+            checkIsFeaturesIsEmpty()
             
             isLoading = false
         } catch {
@@ -112,16 +113,25 @@ struct ExploreView: View {
         isSearching = true
     }
     
+    func checkIsFeaturesIsEmpty(){
+        isFeaturesEmpty = false
+        for place in places {
+            if place.features.isEmpty {
+                isFeaturesEmpty = true
+                break
+            }
+        }
+    }
+    
     func sortPlaces() {
         isSearching = true
         
         switch(selectedSorting){
-                
-            case .noSorting:
+            case .closestDistance:
                 return
                 
             case .alphabetical:
-                let sortedPlaces = places.map{ place in
+                let sortedPlaces = places.map { place in
                     let sortedFeatures = place.features.sorted {
                         $0.properties.name < $1.properties.name
                     }
@@ -130,13 +140,6 @@ struct ExploreView: View {
                 places = sortedPlaces
                 
             case .highestRating:
-                
-                // TODO: Add sorting by highest rating
-               return
-                
-            case .closestDistance:
-
-                // TODO: Add sorting by closest distance
                 return
         }
     }
@@ -146,7 +149,7 @@ struct ExploreView: View {
         isSearching = true
         
         let sortedPlaces = places.map{ place in
-            let sortedFeatures = place.features.filter{ feature in
+            let sortedFeatures = place.features.filter { feature in
                 allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
             }
             return Places(features: sortedFeatures)
@@ -158,7 +161,7 @@ struct ExploreView: View {
         searchViewModel.debouncedText = ""
         radius = 5000
         selectedCategory = .restaurant
-        selectedSorting = .noSorting
+        selectedSorting = .closestDistance
         isFavouritesSorted = false
         isSearching = false
     }
@@ -173,7 +176,16 @@ struct ExploreView: View {
                     if(isMapShowing) {
                         ExploreMapView(LocationViewModel: locationViewModel, places: places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
-                        ExploreListView(places: places, translatedCategory: $translatedCategory, getDataFromAPI: getDataFromAPI)
+                        if isFeaturesEmpty{
+                            VStack{
+                                Spacer()
+                                Text("Ingen steder funnet.")
+                                    .foregroundStyle(Color.secondary)
+                                Spacer()
+                            }
+                        } else {
+                            ExploreListView(places: places, translatedCategory: $translatedCategory, getDataFromAPI: getDataFromAPI)
+                        }
                     }
                 }
                 
@@ -216,18 +228,18 @@ struct ExploreView: View {
                                 ForEach(Sorting.allCases, id: \.self){ option in
                                     Text(option.rawValue).tag(option)
                                 }
-
+                                
                             }
                             .buttonStyleModifier()
-                                Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
-                                    .toggleStyle(.button)
-                                    .contentTransition(.symbolEffect)
-                                    .background(Color.deepBlue)
-                                    .cornerRadius(50)
+                            Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
+                                .toggleStyle(.button)
+                                .contentTransition(.symbolEffect)
+                                .background(Color.deepBlue)
+                                .cornerRadius(50)
                             
                         } //End VStack
                     } // End HStack
-
+                    
                     Spacer()
                     
                 } // End VStack

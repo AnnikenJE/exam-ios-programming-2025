@@ -20,6 +20,7 @@ struct ExploreListView: View {
     // States
     @State private var isSheetPresented = false
     @State private var selectedPlace: Feature? = nil
+    @State private var isFeatureEmpty = false
     
     // Querys
     @Query private var allSavedPlaces: [SavedPlace]
@@ -30,69 +31,65 @@ struct ExploreListView: View {
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
-            if (places.isEmpty){
-                Text("Ingen steder funnet.")
-            } else {
-                List(places, id: \.self){ place in
-                    ForEach(place.features, id: \.self) { feature in
-                        let matchingPlace = allSavedPlaces.first{ saved in
-                            saved.name == feature.properties.name
-                        }
-                        
-                        let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
-                        
-                        Button{
-                            selectedPlace = feature
-                            isSheetPresented = true
-                        } label: {
-                            VStack{
-                                HStack{
-                                    Text("Navn")
-                                        .foregroundStyle(Color.gray)
-                                    Spacer()
-                                    Text(feature.properties.name)
-                                        .font(.headline)
-                                        .multilineTextAlignment(.trailing)
-                                }
-                                
-                                HStack{
-                                    Text("Adresse")
-                                        .foregroundStyle(Color.gray)
-                                    Spacer()
-                                    Text(feature.properties.addressLine)
-                                        .font(.subheadline)
-                                        .multilineTextAlignment(.trailing)
-                                }
-                                HStack{
-                                    Text("Rating")
-                                        .foregroundStyle(Color.gray)
-                                    Spacer()
-                                    VStack{
-                                        if !ratingsToInt.isEmpty{
-                                            AverageStarRatingView(stars: ratingsToInt)
-                                                .offset(x: 0, y: 15)
-                                                .padding(.bottom, 20)
-                                                .padding(.trailing, 10)
-                                        } else {
-                                            Text("Ingen rating.")
-                                                .font(.subheadline)
-                                                .foregroundStyle(Color.gray)
-                                        }
+            List(places, id: \.self){ place in
+                ForEach(place.features, id: \.self) { feature in
+                    let matchingPlace = allSavedPlaces.first{ saved in
+                        saved.name == feature.properties.name
+                    }
+                    
+                    let ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
+                    
+                    Button{
+                        selectedPlace = feature
+                        isSheetPresented = true
+                    } label: {
+                        VStack{
+                            HStack{
+                                Text("Navn")
+                                    .foregroundStyle(Color.gray)
+                                Spacer()
+                                Text(feature.properties.name)
+                                    .font(.headline)
+                                    .multilineTextAlignment(.trailing)
+                            }
+                            
+                            HStack{
+                                Text("Adresse")
+                                    .foregroundStyle(Color.gray)
+                                Spacer()
+                                Text(feature.properties.addressLine)
+                                    .font(.subheadline)
+                                    .multilineTextAlignment(.trailing)
+                            }
+                            HStack{
+                                Text("Rating")
+                                    .foregroundStyle(Color.gray)
+                                Spacer()
+                                VStack{
+                                    if !ratingsToInt.isEmpty{
+                                        AverageStarRatingView(stars: ratingsToInt)
+                                            .offset(x: 0, y: 15)
+                                            .padding(.bottom, 20)
+                                            .padding(.trailing, 10)
+                                    } else {
+                                        Text("Ingen rating.")
+                                            .font(.subheadline)
+                                            .foregroundStyle(Color.gray)
                                     }
                                 }
-                            } // End VStack
-                        } // End Button Label
-                    } // End ForEach
-                }  // End List
-                .sheet(isPresented: $isSheetPresented){
-                    PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
-                }
-                .padding(.top, 100)
-                .refreshable {
-                    try? await Task.sleep(for: .milliseconds(500)) // Without sleep getDataFromApi will get cancelled.
-                    Task{
-                        await getDataFromAPI()
-                    }
+                            }
+                        } // End VStack
+                    } // End Button Label
+                } // End ForEach
+            }  // End List
+            .sheet(isPresented: $isSheetPresented){
+                PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
+            }
+            .padding(.top, 110)
+            .refreshable {
+                try? await Task.sleep(for: .milliseconds(500)) // Without sleep getDataFromApi will get cancelled.
+                Task{
+                    await getDataFromAPI()
                 }
             }
         } // End NavigationStack
