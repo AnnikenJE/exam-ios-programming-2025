@@ -59,11 +59,54 @@ struct ExploreView: View {
                            span:
                             MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
     
+    
+    // Computed variables
+    var sortedAndFilteredPlaces : [Places] {
+        
+        var result = places
+        
+        // Favourite toggle
+        // If it´s rated then its a favourite. (Even with bad rating :)
+        if isFavouritesSorted {
+            let sortedPlaces = places.map{ place in
+                let sortedFeatures = place.features.filter { feature in
+                    allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
+                }
+                return Places(features: sortedFeatures)
+            }
+            result = sortedPlaces
+        }
+        
+        // Switch for sorting picker
+        switch(selectedSorting){
+            case .closestDistance:
+                return result // Default.
+                
+            case .alphabetical:
+                let sortedPlaces = places.map { place in
+                    let sortedFeatures = place.features.sorted {
+                        $0.properties.name < $1.properties.name
+                    }
+                    return Places(features: sortedFeatures)
+                }
+                result = sortedPlaces
+                
+            case .highestRating:
+                
+                return result
+            }
+        
+        
+        return result
+    }
+    
+    
     // Functions
     func getDataFromAPI() async {
         do {
             isLoading = true
             errorMessage = nil
+            isSearching = true
             
             getCategory()
             generateSearchInURL()
@@ -76,12 +119,8 @@ struct ExploreView: View {
             let places = try JSONDecoder().decode(Places.self, from: data)
             self.places = [places]
             
-            sortPlaces()
-            if isFavouritesSorted{
-                sortFavourites()
-            }
             checkIsFeaturesIsEmpty()
-            
+
             isLoading = false
         } catch {
             isLoading = false
@@ -101,7 +140,6 @@ struct ExploreView: View {
             category = "catering.restaurant"
             translatedCategory = "Restaurant"
         }
-        isSearching = true
     }
     
     func generateSearchInURL() {
@@ -110,7 +148,6 @@ struct ExploreView: View {
         } else {
             searchTextInURL = ""
         }
-        isSearching = true
     }
     
     func checkIsFeaturesIsEmpty(){
@@ -121,40 +158,6 @@ struct ExploreView: View {
                 break
             }
         }
-    }
-    
-    func sortPlaces() {
-        isSearching = true
-        
-        switch(selectedSorting){
-            case .closestDistance:
-                return
-                
-            case .alphabetical:
-                let sortedPlaces = places.map { place in
-                    let sortedFeatures = place.features.sorted {
-                        $0.properties.name < $1.properties.name
-                    }
-                    return Places(features: sortedFeatures)
-                }
-                places = sortedPlaces
-                
-            case .highestRating:
-                return
-        }
-    }
-    
-    // If it´s rated then its a favourite. (Even with bad rating :)
-    func sortFavourites ()  {
-        isSearching = true
-        
-        let sortedPlaces = places.map{ place in
-            let sortedFeatures = place.features.filter { feature in
-                allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
-            }
-            return Places(features: sortedFeatures)
-        }
-        places = sortedPlaces
     }
     
     func clearButton() async {
@@ -174,7 +177,7 @@ struct ExploreView: View {
                     ProgressView("Henter steder...")
                 } else {
                     if(isMapShowing) {
-                        ExploreMapView(LocationViewModel: locationViewModel, places: places, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
+                        ExploreMapView(LocationViewModel: locationViewModel, places: sortedAndFilteredPlaces, location: $location, latitude: $latitude, longitude: $longitude, translatedCategory: $translatedCategory)
                     } else {
                         if isFeaturesEmpty{
                             VStack{
@@ -184,7 +187,7 @@ struct ExploreView: View {
                                 Spacer()
                             }
                         } else {
-                            ExploreListView(places: places, translatedCategory: $translatedCategory, getDataFromAPI: getDataFromAPI)
+                            ExploreListView(places: sortedAndFilteredPlaces, translatedCategory: $translatedCategory, getDataFromAPI: getDataFromAPI)
                         }
                     }
                 }
@@ -199,7 +202,6 @@ struct ExploreView: View {
                                 
                                 Button {
                                     isFavouritesSorted.toggle()
-                                    isSearching = true
                                 } label: {
                                     Image(systemName: isFavouritesSorted ? "star.fill" : "star.slash")
                                 }
@@ -210,7 +212,6 @@ struct ExploreView: View {
                                    in: 1000...10000,
                                    onEditingChanged: { sliding in
                                 isSliding = sliding
-                                isSearching = true
                                 
                             })
                             .frame(width: 200)

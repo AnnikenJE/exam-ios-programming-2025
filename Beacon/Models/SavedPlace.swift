@@ -6,8 +6,6 @@
 
 // Model for saving places rating
 
-// There is a lot of unessecary properties in the model. I tried connecting MyPlacesView with PlaceDetailsview but ran into some problems and was not able to finish it.
-
 import SwiftData
 import Foundation
 
@@ -28,7 +26,7 @@ class SavedPlace {
     @Relationship(deleteRule:.cascade, inverse: \Rating.savedPlace)
     var ratings: [Rating]
     
-    init(name: String, address: String, ratings: [Rating] = [], category: String, phone: String? = nil, email: String?, openingHours: String? = nil, website: String? = nil, lon: Double, lat: Double) {
+    init(name: String, address: String, ratings: [Rating] = [], category: String, phone: String? = nil, email: String? = nil, openingHours: String? = nil, website: String? = nil, lon: Double, lat: Double) {
         self.id = UUID()
         self.name = name
         self.address = address
