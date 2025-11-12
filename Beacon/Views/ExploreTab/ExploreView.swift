@@ -77,7 +77,6 @@ struct ExploreView: View {
             self.places = [places]
             
             sortPlaces()
-
             if isFavouritesSorted{
                 sortFavourites()
             }
@@ -113,8 +112,6 @@ struct ExploreView: View {
         isSearching = true
     }
     
-    
-
     func sortPlaces() {
         isSearching = true
         
@@ -124,13 +121,13 @@ struct ExploreView: View {
                 return
                 
             case .alphabetical:
-                let filteredPlaces = places.map{ place in
-                    let filteredFeatures = place.features.sorted {
+                let sortedPlaces = places.map{ place in
+                    let sortedFeatures = place.features.sorted {
                         $0.properties.name < $1.properties.name
                     }
-                    return Places(features: filteredFeatures)
+                    return Places(features: sortedFeatures)
                 }
-                places = filteredPlaces
+                places = sortedPlaces
                 
             case .highestRating:
                 
@@ -182,43 +179,55 @@ struct ExploreView: View {
                 
                 VStack {
                     HStack {
-                        Slider(value: $radius,
-                               in: 1000...10000,
-                               onEditingChanged: { sliding in
-                            isSliding = sliding
-                            isSearching = true
+                        VStack {
+                            HStack {
+                                Text("Avstand: \(radius / 1000, specifier: "%.1f") km ")
+                                
+                                Spacer()
+                                
+                                Button {
+                                    isFavouritesSorted.toggle()
+                                    isSearching = true
+                                } label: {
+                                    Image(systemName: isFavouritesSorted ? "star.fill" : "star.slash")
+                                }
+                                .buttonStyleModifier()
+                            } // ENd HStack
                             
-                        })
+                            Slider(value: $radius,
+                                   in: 1000...10000,
+                                   onEditingChanged: { sliding in
+                                isSliding = sliding
+                                isSearching = true
+                                
+                            })
+                            .frame(width: 200)
+                        } // End VSTack
+                        .foregroundStyle(Color.beaconOrange)
+                        .padding(8)
+                        .background(Color.deepBlue)
+                        .cornerRadius(8)
                         .frame(width: 200)
                         
                         Spacer(minLength: 10)
                         
-                        Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
-                            .toggleStyle(.button)
-                            .contentTransition(.symbolEffect)
-                            .background(Color.deepBlue)
-                            .cornerRadius(50)
-                    } // End HStack
-                    
-                    HStack {
-                        Picker("Filter", selection: $selectedSorting) {
-                            ForEach(Sorting.allCases, id: \.self){ option in
-                                Text(option.rawValue).tag(option)
-                            }
+                        VStack {
+                            Picker("Filter", selection: $selectedSorting) {
+                                ForEach(Sorting.allCases, id: \.self){ option in
+                                    Text(option.rawValue).tag(option)
+                                }
 
-                        }
-                        .buttonStyleModifier()
-                        
-                        Button {
-                            isFavouritesSorted.toggle()
-                            isSearching = true
-                        } label: {
-                            Image(systemName: isFavouritesSorted ? "star.fill" : "star.slash")
-                        }
-                        .buttonStyleModifier()
-                        Spacer()
+                            }
+                            .buttonStyleModifier()
+                                Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)
+                                    .toggleStyle(.button)
+                                    .contentTransition(.symbolEffect)
+                                    .background(Color.deepBlue)
+                                    .cornerRadius(50)
+                            
+                        } //End VStack
                     } // End HStack
-                    
+
                     Spacer()
                     
                 } // End VStack

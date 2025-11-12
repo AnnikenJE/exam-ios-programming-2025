@@ -44,7 +44,7 @@ struct AverageStarRatingView: View {
                              .offset(x: -8)
                     )
                 
-                GeometryReader{ geo in
+                GeometryReader { geo in
                     Rectangle()
                         .fill(Color.beaconOrange)
                         .frame(width: geo.size.width * CGFloat(averageRating / 5))
