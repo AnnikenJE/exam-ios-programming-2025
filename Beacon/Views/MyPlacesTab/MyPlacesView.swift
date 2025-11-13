@@ -24,19 +24,26 @@ struct MyPlacesView: View {
                 // Section for places
                 Section {
                     ForEach(allSavedPlaces) { place in
-                        HStack{
-                            Spacer()
-                            Text(place.name)
-                                .font(.headline.bold())
-                                .padding()
-                            AverageStarRatingView(stars: place.ratings.map { $0.stars})
-                                .padding()
-                            Spacer()
+                        VStack(spacing: 20) {
+                        Spacer()
+                        Divider()
+                            .overlay(.deepBlue)
+                            .frame(width: 250)
+
+                            HStack{
+                                Spacer()
+                                Text(place.name)
+                                    .font(.headline.bold())
+                                    .padding()
+                                AverageStarRatingView(stars: place.ratings.map { $0.stars})
+                                    .padding()
+                                Spacer()
+                            }
                         }
                         // Section for ratings
                         Section {
                             ForEach(place.ratings){ rating in
-                                HStack(){
+                                HStack {
                                     Spacer()
                                     Text("Date: \(rating.date.formatted(.dateTime.day().month().year()))")
                                     Spacer()

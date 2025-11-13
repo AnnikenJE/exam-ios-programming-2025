@@ -17,9 +17,9 @@ struct PlaceDetailsView: View {
     @Environment(\.modelContext) private var modelContext
     
     // Bindings
-    @Binding var place: Feature?  
+    @Binding var place: Feature?
     @Binding var translatedCategory: String
- 
+    
     // Querys
     @Query private var allSavedPlaces: [SavedPlace]
     
@@ -71,7 +71,7 @@ struct PlaceDetailsView: View {
                 let newPlace = SavedPlace(name: placeName, address: placeAddress, ratings: [], category: placeCategory, phone: placePhone, email: placeEmail, openingHours: placeOpeningHours, website: placeWebsite, lon: placeLon, lat: placeLat)
                 modelContext.insert(newPlace)
                 placeToRate = newPlace
-             }
+            }
             
             let newRating = Rating(savedPlace: placeToRate, stars: starRating)
             modelContext.insert(newRating)
@@ -101,7 +101,7 @@ struct PlaceDetailsView: View {
                                 .foregroundStyle(Color(.gray))
                             Spacer()
                             if !ratingsToInt.isEmpty{
-                                    AverageStarRatingView(stars: ratingsToInt)
+                                AverageStarRatingView(stars: ratingsToInt)
                                     .offset(x: 0, y: 15)
                                     .padding(.bottom, 20)
                                     .padding(.trailing, 10)
@@ -239,7 +239,7 @@ struct PlaceDetailsView: View {
                                 Image(systemName: "plus")
                             }
                             .alert(isPresented: $isRated){
-                                Alert(title: Text(place?.properties.name ?? "Kunne ikke vise navn."), message: Text("Takk for din tilbakemelding"))
+                                Alert(title: Text(place?.properties.name ?? "Kunne ikke vise navn."), message: Text("Takk for din tilbakemelding! 😸"))
                             }
                             .buttonStyleModifier()
                         } // End HStack with stars
