@@ -21,7 +21,8 @@ struct HotelAnimationView: View {
                 withAnimation(.spring(bounce: 0.8).delay(0.3)){
                     scale = 1.0
                 }
-            }   .scaleEffect(scale)
+            }
+            .scaleEffect(scale)
     } // End Body
 }
 
