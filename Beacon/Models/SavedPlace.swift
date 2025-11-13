@@ -24,11 +24,12 @@ class SavedPlace {
     var website: String?
     var lon: Double
     var lat: Double
+    var averageRating: Double? 
     
     @Relationship(deleteRule:.cascade, inverse: \Rating.savedPlace)
     var ratings: [Rating]
     
-    init(name: String, address: String, ratings: [Rating] = [], category: String, phone: String? = nil, email: String? = nil, openingHours: String? = nil, website: String? = nil, lon: Double, lat: Double) {
+    init(name: String, address: String, ratings: [Rating] = [], category: String, phone: String? = nil, email: String? = nil, openingHours: String? = nil, website: String? = nil, lon: Double, lat: Double, averageRating: Double? = nil) {
         self.id = UUID()
         self.name = name
         self.address = address
@@ -40,6 +41,7 @@ class SavedPlace {
         self.website = website
         self.lon = lon
         self.lat = lat
+        self.averageRating = averageRating
     }
 }
 

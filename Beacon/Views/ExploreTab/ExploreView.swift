@@ -40,6 +40,7 @@ struct ExploreView: View {
     
     // States
     @State private var places: [Places] = []
+    @State private var sortedRatings: [Places] = []
     @State private var category = "catering.restaurant"
     @State private var translatedCategory = "Restaurant"
     @State private var searchTextInURL = ""
@@ -91,23 +92,8 @@ struct ExploreView: View {
                 result = sortedPlaces
                 
             case .highestRating:
-                
-                // TODO: FIX HIGHEST RATING SORTING
-                 
-                // Find matching place with savedPlace and filter out places with no match
-                let sortedPlaces = places.map { place in
-                    let sortedFeatures = place.features.filter { feature in
-                        allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
-                    }
-                    return Places(features: sortedFeatures)
-                }
-                
-                // Calculate average rating
-                
-                // Sort by average rating
-        
-                result = sortedPlaces
-            }
+                return sortedRatings
+        }
         return result
     }
     
@@ -136,6 +122,41 @@ struct ExploreView: View {
             errorMessage = "Something went wrong in getDataFromAPI(). \(error.localizedDescription)"
             print(errorMessage ?? "No error message.")
         }
+    }
+    
+    func sortRating(){
+        // Find matching place with savedPlace and filter out places with no match
+        let filteredPlaces = places.map { place in
+            let filteredFeatures = place.features.filter { feature in
+                allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
+            }
+            return Places(features: filteredFeatures)
+        }
+        
+        // Sort savedPlaces from swiftData by rating
+        for savedPlace in allSavedPlaces {
+            var sum = 0
+            for ratings in savedPlace.ratings {
+                sum += ratings.stars
+            }
+            savedPlace.averageRating = Double(sum) / Double(savedPlace.ratings.count)
+        }
+        
+        let sortedPlacesFromDatabase = allSavedPlaces.sorted{ $0.averageRating ?? 0.0 > $1.averageRating ?? 0.0}
+        
+        // Match savedPlaces and places
+        var sortedFeatures: [Feature] = []
+        for saved in sortedPlacesFromDatabase {
+            for place in filteredPlaces {
+                for feature in place.features {
+                    if feature.properties.name == saved.name {
+                        sortedFeatures.append(feature)
+                    }
+                }
+            }
+        }
+        
+        sortedRatings = [Places(features: sortedFeatures)]
     }
     
     func getCategory() {
@@ -314,6 +335,12 @@ struct ExploreView: View {
             Task{
                 await getDataFromAPI()
             }
+        }
+        .onChange(of: places){
+            sortRating()
+        }
+        .onChange(of: allSavedPlaces){
+            sortRating()
         }
     } // End body
 }
