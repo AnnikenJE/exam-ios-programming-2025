@@ -31,6 +31,7 @@ struct ExploreListView: View {
     // --------------------------------------- Body
     var body: some View {
         NavigationStack {
+            // List
             List(places, id: \.self){ place in
                 ForEach(place.features, id: \.self) { feature in
                     let matchingPlace = allSavedPlaces.first{ saved in

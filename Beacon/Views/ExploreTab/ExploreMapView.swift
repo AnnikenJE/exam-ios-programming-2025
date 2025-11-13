@@ -45,6 +45,7 @@ struct ExploreMapView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                // Map
                 Map(position: $location) {
                     ForEach(places, id: \.self) { place in
                         ForEach(place.features, id: \.self) { place in

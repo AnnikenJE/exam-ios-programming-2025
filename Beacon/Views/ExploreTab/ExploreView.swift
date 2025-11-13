@@ -171,6 +171,7 @@ struct ExploreView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                // Toggle between map and list
                 if(isLoading) {
                     ProgressView("Henter steder...")
                 } else {
@@ -180,8 +181,12 @@ struct ExploreView: View {
                         if isFeaturesEmpty{
                             VStack{
                                 Spacer()
-                                Text("Ingen steder funnet.")
-                                    .foregroundStyle(Color.secondary)
+                                HStack{
+                                    Text("Ingen steder funnet. ")
+                                        .foregroundStyle(Color.secondary)
+                                    Image(systemName: "mappin.slash")
+                                        .foregroundStyle(Color.secondary)
+                                }
                                 Spacer()
                             }
                         } else {
