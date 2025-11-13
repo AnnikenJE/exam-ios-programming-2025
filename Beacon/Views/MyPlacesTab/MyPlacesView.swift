@@ -17,7 +17,7 @@ struct MyPlacesView: View {
     // Enviroments
     @Environment(\.modelContext) private var modelContext
     
-    // --------------------------------------- Body
+    // Body ---------------------------------------
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -27,7 +27,7 @@ struct MyPlacesView: View {
                         VStack(spacing: 20) {
                         Spacer()
                         Divider()
-                            .overlay(.deepBlue)
+                            .overlay(.beaconOrange)
                             .frame(width: 250)
 
                             HStack{
@@ -56,7 +56,6 @@ struct MyPlacesView: View {
                                 .background(Color.accentColor.opacity(0.3))
                                 .frame(maxWidth: 300)
                                 .cornerRadius(18)
-                                
                            } // End ForEach
                         } // End Section
                     } // End ForEach

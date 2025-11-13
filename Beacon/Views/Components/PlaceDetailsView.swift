@@ -89,7 +89,7 @@ struct PlaceDetailsView: View {
         ratingsToInt = matchingPlace?.ratings.map { $0.stars} ?? []
     }
     
-    // --------------------------------------- Body
+    // Body ---------------------------------------
     var body: some View {
         NavigationStack {
             VStack {
@@ -105,8 +105,8 @@ struct PlaceDetailsView: View {
                                     .offset(x: 0, y: 15)
                                     .padding(.bottom, 20)
                                     .padding(.trailing, 10)
-                            } else{
-                                Text("Ingen vurderinger.")
+                            } else {
+                                Text("Ingen vurderinger")
                             }
                         } // End HStack
                         
@@ -121,21 +121,21 @@ struct PlaceDetailsView: View {
                             Text("Adresse")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text(place?.properties.addressLine ?? "Ingen adresse.")
+                            Text(place?.properties.addressLine ?? "Ingen adresse")
                         } // End HStack
                         
                         HStack {
                             Text("Telefonnummer")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text(place?.properties.contact?.phone ?? "Ingen telefonnummer.")
+                            Text(place?.properties.contact?.phone ?? "Ingen telefonnummer")
                         } // End HStack
                         
                         HStack {
                             Text("Åpningstider")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text(place?.properties.openingHours ?? "Ingen åpningstider.")
+                            Text(place?.properties.openingHours ?? "Ingen åpningstider")
                         } // End HStack
                         
                         HStack {
@@ -146,10 +146,10 @@ struct PlaceDetailsView: View {
                                 if let url = URL(string: website){
                                     Link(website, destination: url)
                                 } else {
-                                    Text("Ingen nettside.")
+                                    Text("Ingen nettside")
                                 }
                             } else {
-                                Text("Ingen nettside.")
+                                Text("Ingen nettside")
                             }
                         } // End HStack
                         
@@ -157,7 +157,7 @@ struct PlaceDetailsView: View {
                             Text("Koordinater")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            Text("latitude \(place?.properties.lat ?? 0.0), \nlongitude \(place?.properties.lon ?? 0.0)")
+                            Text("Latitude \(place?.properties.lat ?? 0.0), \nLongitude \(place?.properties.lon ?? 0.0)")
                         } // End HStack
                         
                         Button {
@@ -251,14 +251,14 @@ struct PlaceDetailsView: View {
             // Toolbar
             .toolbar{
                 ToolbarItem(placement: .largeTitle) {
-                    Text(place?.properties.name ?? "Kunne ikke vise navn.")
+                    Text(place?.properties.name ?? "Kunne ikke vise navn")
                         .headingStyleModifier()
                 } // End ToolbarItem
                 
                 ToolbarItem(placement: .principal){
                     switch(translatedCategory){
                         case "Restaurant":
-                            ResturantAnimationView()
+                            RestaurantAnimationView()
                         case "Kafé":
                             CafeAnimationView()
                         case "Hotell":
@@ -285,13 +285,13 @@ struct PlaceDetailsView: View {
     } // End body
 }
 
-// --------------------------------------- Preview
+// Preview --------------------------------------- 
 #Preview {
     PlaceDetailsView(
         place: .constant(
             Feature(
                 properties:
-                    Properties(name: "Resturant Navn", addressLine: "Adresse Adresse 23", lat: 23.12412, lon: 41.24232, openingHours: "10:00-18:00", website: "www.test.com", contact: Contact(phone: "+2324332", email: "test@test.no")
+                    Properties(name: "Navn", addressLine: "Adresse Adresse 23", lat: 23.12412, lon: 41.24232, openingHours: "10:00-18:00", website: "www.example.com", contact: Contact(phone: "+2324332", email: "test@example.com")
                               )
             )
         ),

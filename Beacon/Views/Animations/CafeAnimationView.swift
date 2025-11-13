@@ -2,7 +2,7 @@
 //  CafeAnimationView.swift
 //  Beacon
 //
-//  Kandidatnummer 97
+// Kandidatnr 97
 
 // Animation for places: Cafe.
 
@@ -19,7 +19,7 @@ struct CafeAnimationView: View {
     @State private var offsetY2: CGFloat = -35
     @State private var offsetY3: CGFloat = -35
     
-    // --------------------------------------- Body
+    // Body ---------------------------------------
     var body: some View {
         VStack {
             Text("☕️")
@@ -71,7 +71,7 @@ struct CafeAnimationView: View {
     } // End body
 }
 
-// --------------------------------------- Preview
+// Preview ---------------------------------------
 #Preview {
     CafeAnimationView()
 }

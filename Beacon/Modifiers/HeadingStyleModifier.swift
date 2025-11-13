@@ -23,11 +23,10 @@ extension View {
     }
 }
 
-// --------------------------------------- Preview
+// Preview ---------------------------------------
 #Preview {
     VStack {
         Text("Beacon")
             .headingStyleModifier()
-            
     }
 }

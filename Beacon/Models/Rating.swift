@@ -11,7 +11,6 @@ import Foundation
 
 @Model
 class Rating {
-    
     var id: UUID
     var stars: Int
     var date: Date

@@ -41,7 +41,7 @@ struct ExploreMapView: View {
         print(LocationViewModel.locationString)
     }
         
-    // --------------------------------------- Body
+    // Body --------------------------------------- 
     var body: some View {
         NavigationStack {
             ZStack {

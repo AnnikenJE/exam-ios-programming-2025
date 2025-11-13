@@ -1,19 +1,19 @@
 //
-//  ResturantAnimationView.swift
+//  RestaurantAnimationView.swift
 //  Beacon
 //
-//  Kandidatnummer 97
+// Kandidatnr 97
 
-// Animation for places: Resturant.
+// Animation for places: Restaurant.
 
 import SwiftUI
 
-struct ResturantAnimationView: View {
+struct RestaurantAnimationView: View {
     
     // States
     @State private var degrees = 0.0
     
-    // --------------------------------------- Body
+    // Body --------------------------------------- 
     var body: some View {
         Text("🍽️")
             .font(.system(size: 30))
@@ -25,7 +25,7 @@ struct ResturantAnimationView: View {
     } // End body
 }
 
-// --------------------------------------- Preview
+// Preview ---------------------------------------
 #Preview {
-    ResturantAnimationView()
+    RestaurantAnimationView()
 }

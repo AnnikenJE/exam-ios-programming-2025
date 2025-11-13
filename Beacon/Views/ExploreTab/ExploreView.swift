@@ -60,7 +60,6 @@ struct ExploreView: View {
                            span:
                             MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
     
-    
     // Computed variables
     var sortedAndFilteredPlaces : [Places] {
         var result = places
@@ -110,7 +109,6 @@ struct ExploreView: View {
             guard let url = URL(string: "https://api.geoapify.com/v2/places?categories=\(category)&filter=circle:\(longitude),\(latitude),\(Int(radius))\(searchTextInURL)&bias=proximity:\(longitude),\(latitude)&limit=10&apiKey=\(APIKey.geoapifyAPIKey)") else { print("Invalid URL in getDataFromAPI().")
                 return
             }
-            print(url)
             let (data, _) = try await URLSession.shared.data(from: url)
             let places = try JSONDecoder().decode(Places.self, from: data)
             self.places = [places]
@@ -124,6 +122,7 @@ struct ExploreView: View {
         }
     }
     
+    // Triggers onChange of place and savedPlaces.
     func sortRating(){
         // Find matching place with savedPlace and filter out places with no match
         let filteredPlaces = places.map { place in
@@ -133,7 +132,7 @@ struct ExploreView: View {
             return Places(features: filteredFeatures)
         }
         
-        // Sort savedPlaces from swiftData by rating
+        // Calculating average rating and apply to saved place
         for savedPlace in allSavedPlaces {
             var sum = 0
             for ratings in savedPlace.ratings {
@@ -142,9 +141,10 @@ struct ExploreView: View {
             savedPlace.averageRating = Double(sum) / Double(savedPlace.ratings.count)
         }
         
+        // Sort allSavedPlaces based on average rating
         let sortedPlacesFromDatabase = allSavedPlaces.sorted{ $0.averageRating ?? 0.0 > $1.averageRating ?? 0.0}
         
-        // Match savedPlaces and places
+        // Match savedPlaces and places in order to return Places sorted by allSavedPlaces rating
         var sortedFeatures: [Feature] = []
         for saved in sortedPlacesFromDatabase {
             for place in filteredPlaces {
@@ -155,7 +155,6 @@ struct ExploreView: View {
                 }
             }
         }
-        
         sortedRatings = [Places(features: sortedFeatures)]
     }
     
@@ -199,7 +198,7 @@ struct ExploreView: View {
         isSearching = false
     }
     
-    // --------------------------------------- Body
+    // Body ---------------------------------------
     var body: some View {
         NavigationStack {
             ZStack {
@@ -213,12 +212,14 @@ struct ExploreView: View {
                         if isFeaturesEmpty{
                             VStack{
                                 Spacer()
-                                HStack{
-                                    Text("Ingen steder funnet. ")
-                                        .foregroundStyle(Color.secondary)
+                                VStack(spacing: 10){
                                     Image(systemName: "mappin.slash")
-                                        .foregroundStyle(Color.secondary)
+                                    Text("Ingen steder funnet.")
+                                    Text("Vennligst trykk på oppdaterknappen oppe til høyre.")
                                 }
+                                .padding()
+                                .foregroundStyle(Color.secondary)
+                                .multilineTextAlignment(.center)
                                 Spacer()
                             }
                         } else {
@@ -231,7 +232,7 @@ struct ExploreView: View {
                     HStack {
                         VStack {
                             HStack {
-                                Text("Avstand: \(radius / 1000, specifier: "%.1f") km ")
+                                Text("Avstand: \(radius / 1000, specifier: "%.1f") km")
                                 Spacer()
                                 Button {
                                     isFavouritesSorted.toggle()
@@ -241,12 +242,11 @@ struct ExploreView: View {
                                 .buttonStyleModifier()
                             } // End HStack
                             
-                            // Search by radius - only works on API call.
+                            // Search by radius - only works on API call when you press refresh button.
                             Slider(value: $radius,
                                    in: 1000...10000,
                                    onEditingChanged: { sliding in
                                 isSliding = sliding
-                                
                             })
                             .frame(width: 200)
                         } // End VSTack
@@ -330,7 +330,7 @@ struct ExploreView: View {
             .toolbarBackground(Color.deepBlue, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for:.navigationBar)
         } // End NavigationStack
-        .searchable(text: $searchViewModel.searchText)
+        .searchable(text: $searchViewModel.searchText) // Search is slow sometimes, give it some time and it will show the right result.
         .onChange(of: searchViewModel.debouncedText){ oldText, newText in
             Task{
                 await getDataFromAPI()
@@ -345,7 +345,7 @@ struct ExploreView: View {
     } // End body
 }
 
-// --------------------------------------- Preview
+// Preview ---------------------------------------
 #Preview {
     ExploreView(locationViewModel: LocationViewModel())
 }

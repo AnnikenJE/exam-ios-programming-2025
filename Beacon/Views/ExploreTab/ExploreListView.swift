@@ -28,7 +28,7 @@ struct ExploreListView: View {
     // Functions from parent
     var getDataFromAPI: () async -> Void
     
-    // --------------------------------------- Body
+    // Body --------------------------------------- 
     var body: some View {
         NavigationStack {
             List(places, id: \.self){ place in
@@ -73,7 +73,7 @@ struct ExploreListView: View {
                                             .padding(.bottom, 20)
                                             .padding(.trailing, 10)
                                     } else {
-                                        Text("Ingen rating.")
+                                        Text("Ingen rating")
                                             .font(.subheadline)
                                             .foregroundStyle(Color.gray)
                                     }
@@ -86,7 +86,7 @@ struct ExploreListView: View {
             .sheet(isPresented: $isSheetPresented){
                 PlaceDetailsView(place: $selectedPlace, translatedCategory: $translatedCategory)
             }
-            .padding(.top, 110)
+            .padding(.top, 120)
             .refreshable {
                 try? await Task.sleep(for: .milliseconds(500)) // Without sleep getDataFromApi will get cancelled.
                 Task{

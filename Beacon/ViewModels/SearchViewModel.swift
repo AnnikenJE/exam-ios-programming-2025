@@ -6,8 +6,12 @@
 
 // ViewModel for search in ExploreView. Debouncing.
 
-// Source: Combine. (2024). Tanaschita.com. https://tanaschita.com/combine-swiftui-search-query-debounce/
-// Source: Saidi, D. (2025). Creating a debounced search context for performant SwiftUI searches. Danielsaidi.com. https://danielsaidi.com/blog/2025/01/08/creating-a-debounced-search-context-for-performant-swiftui-searches
+/*
+ Source: Combine. (2024). Tanaschita.com.
+ - https://tanaschita.com/combine-swiftui-search-query-debounce/
+ Source: Saidi, D. (2025). Creating a debounced search context for performant SwiftUI searches. Danielsaidi.com.
+ - https://danielsaidi.com/blog/2025/01/08/creating-a-debounced-search-context-for-performant-swiftui-searches
+ */
 
 import Foundation
 import Combine

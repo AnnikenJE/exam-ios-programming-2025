@@ -11,7 +11,7 @@ import SwiftData
 
 struct MainTabView: View {
     
-    // --------------------------------------- Body
+    // Body ---------------------------------------
     var body: some View {
         TabView{
             ExploreView(locationViewModel: LocationViewModel())
@@ -28,7 +28,7 @@ struct MainTabView: View {
     } // End Body
 }
 
-// --------------------------------------- Preview
+// Preview --------------------------------------- 
 #Preview {
     MainTabView()
 }

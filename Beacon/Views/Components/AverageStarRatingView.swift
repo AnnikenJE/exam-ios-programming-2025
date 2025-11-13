@@ -25,7 +25,7 @@ struct AverageStarRatingView: View {
         averageRating = Double(sum) / Double(stars.count)
     }
     
-    // --------------------------------------- Body
+    // Body ---------------------------------------
     var body: some View {
         
         HStack {
@@ -64,7 +64,7 @@ struct AverageStarRatingView: View {
         } // End Body
 }
 
-// --------------------------------------- Preview
+// Preview --------------------------------------- 
 #Preview {
     AverageStarRatingView(stars: [1, 2, 5, 4, 3])
 }

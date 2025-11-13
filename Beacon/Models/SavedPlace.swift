@@ -13,7 +13,6 @@ import Foundation
 
 @Model
 class SavedPlace {
-    
     var id: UUID
     var name: String
     var address: String

@@ -2,7 +2,7 @@
 //  HotelAnimationView.swift
 //  Beacon
 //
-//  Kandidatnummer 97
+// Kandidatnr 97
 
 // Animation for places: Hotel.
 
@@ -13,7 +13,7 @@ struct HotelAnimationView: View {
     // States
     @State private var scale = 0.5
     
-    // --------------------------------------- Body
+    // Body --------------------------------------- 
     var body: some View {
         Text("🏨")
             .font(Font.system(size: 30))
@@ -25,7 +25,7 @@ struct HotelAnimationView: View {
     } // End Body
 }
 
-// --------------------------------------- Preview
+// Preview ---------------------------------------
 #Preview {
     HotelAnimationView()
 }
