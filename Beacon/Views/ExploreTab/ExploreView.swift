@@ -59,13 +59,12 @@ struct ExploreView: View {
                            span:
                             MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
     
+    
     // Computed variables
     var sortedAndFilteredPlaces : [Places] {
-        
         var result = places
         
-        // Favourite toggle
-        // If it´s rated then its a favourite. (Even with bad rating :)
+        // Favourite toggle - If it´s rated then its a favourite. (Even with bad rating :)
         if isFavouritesSorted {
             let sortedPlaces = places.map{ place in
                 let sortedFeatures = place.features.filter { feature in
@@ -94,8 +93,20 @@ struct ExploreView: View {
             case .highestRating:
                 
                 // TODO: FIX HIGHEST RATING SORTING
+                 
+                // Find matching place with savedPlace and filter out places with no match
+                let sortedPlaces = places.map { place in
+                    let sortedFeatures = place.features.filter { feature in
+                        allSavedPlaces.contains(where: {$0.name == feature.properties.name && !$0.ratings.isEmpty})
+                    }
+                    return Places(features: sortedFeatures)
+                }
+                
+                // Calculate average rating
+                
+                // Sort by average rating
         
-                return result
+                result = sortedPlaces
             }
         return result
     }
@@ -200,9 +211,7 @@ struct ExploreView: View {
                         VStack {
                             HStack {
                                 Text("Avstand: \(radius / 1000, specifier: "%.1f") km ")
-                                
                                 Spacer()
-                                
                                 Button {
                                     isFavouritesSorted.toggle()
                                 } label: {
@@ -211,6 +220,7 @@ struct ExploreView: View {
                                 .buttonStyleModifier()
                             } // End HStack
                             
+                            // Search by radius - only works on API call.
                             Slider(value: $radius,
                                    in: 1000...10000,
                                    onEditingChanged: { sliding in
@@ -232,7 +242,6 @@ struct ExploreView: View {
                                 ForEach(Sorting.allCases, id: \.self){ option in
                                     Text(option.rawValue).tag(option)
                                 }
-                                
                             }
                             .buttonStyleModifier()
                             Toggle(isMapShowing ? "Show List" :"Show Map", systemImage: isMapShowing ? "list.dash" : "map.fill", isOn: $isMapShowing)

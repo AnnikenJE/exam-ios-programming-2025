@@ -30,6 +30,7 @@ struct PlaceDetailsView: View {
     @State private var fiveStarReview = false
     @State private var starRating = 1
     @State private var ratingsToInt: [Int] = []
+    @State private var isRated = false
     
     // Functions
     func openAppleMaps(){
@@ -56,21 +57,23 @@ struct PlaceDetailsView: View {
         let placeWebsite = place.properties.website
         let placeLon = place.properties.lon
         let placeLat = place.properties.lat
+        
+        // Check if place exists in database
         let existingPlace = allSavedPlaces.first(where: { saved in
             saved.name == placeName && saved.address == placeAddress})
         
         do {
-            let newPlaceToRate: SavedPlace
+            let placeToRate: SavedPlace
             
             if let existing = existingPlace {
-                newPlaceToRate = existing
+                placeToRate = existing
             } else {
                 let newPlace = SavedPlace(name: placeName, address: placeAddress, ratings: [], category: placeCategory, phone: placePhone, email: placeEmail, openingHours: placeOpeningHours, website: placeWebsite, lon: placeLon, lat: placeLat)
                 modelContext.insert(newPlace)
-                newPlaceToRate = newPlace
+                placeToRate = newPlace
              }
             
-            let newRating = Rating(savedPlace: newPlaceToRate, stars: starRating)
+            let newRating = Rating(savedPlace: placeToRate, stars: starRating)
             modelContext.insert(newRating)
             try modelContext.save()
             
@@ -79,7 +82,7 @@ struct PlaceDetailsView: View {
         }
     }
     
-    func findPlaceInDatabase() {
+    func findPlaceRatingsInDatabase() {
         let matchingPlace = allSavedPlaces.first{ saved in
             saved.name == place?.properties.name
         }
@@ -139,7 +142,6 @@ struct PlaceDetailsView: View {
                             Text("Nettside")
                                 .foregroundStyle(Color(.gray))
                             Spacer()
-                            
                             if let website = place?.properties.website{
                                 if let url = URL(string: website){
                                     Link(website, destination: url)
@@ -170,7 +172,7 @@ struct PlaceDetailsView: View {
                 } // End Form
                 
                 // Rating Section
-                Section("Vurder"){
+                Section("Gi din vurdering!"){
                     VStack {
                         HStack(spacing: 15){
                             Button {
@@ -230,10 +232,14 @@ struct PlaceDetailsView: View {
                             
                             Button{
                                 ratePlace()
-                                findPlaceInDatabase()
-
-                            } label: {
+                                findPlaceRatingsInDatabase()
+                                isRated.toggle()
+                            }
+                            label: {
                                 Image(systemName: "plus")
+                            }
+                            .alert(isPresented: $isRated){
+                                Alert(title: Text(place?.properties.name ?? "Kunne ikke vise navn."), message: Text("Takk for din tilbakemelding"))
                             }
                             .buttonStyleModifier()
                         } // End HStack with stars
@@ -241,6 +247,7 @@ struct PlaceDetailsView: View {
                     .padding()
                 } // End Section
             } // End VStack
+            
             // Toolbar
             .toolbar{
                 ToolbarItem(placement: .largeTitle) {
@@ -273,7 +280,7 @@ struct PlaceDetailsView: View {
             } // End .toolbar
         } // End navigationStack
         .onAppear{
-            findPlaceInDatabase()
+            findPlaceRatingsInDatabase()
         }
     } // End body
 }

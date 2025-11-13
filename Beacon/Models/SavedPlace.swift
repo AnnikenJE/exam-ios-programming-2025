@@ -6,6 +6,8 @@
 
 // Model for saving places rating
 
+// Added some properties that are not used, just in case it was needed later.
+
 import SwiftData
 import Foundation
 
