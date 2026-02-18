@@ -1,3 +1,10 @@
-# exam-ios-programming-2025
+# 📱 exam-ios-programming-2025
 
-More info coming soon.
+Course: iOS Programming (15 ECTS)  
+Grade: B  
+Technologies: Swift, SwiftUI, Xcode  
+
+
+## 📍 Case: Beacon
+
+More information coming soon.
